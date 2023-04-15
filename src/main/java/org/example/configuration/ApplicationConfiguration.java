@@ -1,14 +1,13 @@
 package org.example.configuration;
 
 import org.apache.catalina.security.SecurityConfig;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.EnableMBeanExport;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.*;
 
 @Configuration
+
 @EnableAspectJAutoProxy
 @EnableMBeanExport
-@Import({DatabaseConfiguration.class})
+@Import({DatabaseConfiguration.class,
+         SecurityConfiguration.class})
 public class ApplicationConfiguration {
 }

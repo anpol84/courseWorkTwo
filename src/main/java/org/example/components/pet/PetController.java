@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/pets")
+@RequestMapping("/api/v1/users/pets")
 public class PetController {
     private final PetService petService;
 

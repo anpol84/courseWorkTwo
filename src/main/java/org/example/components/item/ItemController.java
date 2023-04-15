@@ -1,12 +1,13 @@
 package org.example.components.item;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-
+@Controller
 @RestController
-@RequestMapping("/items")
+@RequestMapping("/api/v1/users/items")
 public class ItemController {
     private final ItemService itemService;
     @Autowired
