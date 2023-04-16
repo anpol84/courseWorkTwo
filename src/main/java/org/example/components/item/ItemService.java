@@ -1,38 +1,62 @@
 package org.example.components.item;
 
+import org.example.auth.User;
+import org.example.auth.UserService;
+import org.example.components.empolyee.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @Service
 public class ItemService {
     private final ItemRepository itemRepository;
     private final MyItemRepository myItemRepository;
+    private final UserService userService;
     @Autowired
-    public ItemService(ItemRepository itemRepository, MyItemRepository myItemRepository) {
+    public ItemService(ItemRepository itemRepository, MyItemRepository myItemRepository,
+                       UserService userService) {
         this.itemRepository = itemRepository;
         this.myItemRepository = myItemRepository;
+        this.userService = userService;
     }
 
-    public Iterable<Item> findAll(){
-        return itemRepository.findAll();
+    public ResponseEntity<String> findAll(){
+        Iterable<Item> items = itemRepository.findAll();
+        return ResponseEntity.ok(items.toString());
     }
 
-    public void save(Item item){
+    public ResponseEntity<String> save(Item item, HttpServletRequest request){
+        if (!userService.checkAdmin(request)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
         itemRepository.save(item);
+        return ResponseEntity.ok("Saved");
     }
 
-    public void deleteById(Long id){
+    public ResponseEntity<String> deleteById(Long id, HttpServletRequest request){
+        if (!userService.checkAdmin(request)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
         itemRepository.deleteById(id);
+        return ResponseEntity.ok("Deleted");
     }
 
-    public Optional<Item> findById(Long id){
-        return itemRepository.findById(id);
+    public ResponseEntity<String> findById(Long id){
+        Optional<Item> item = itemRepository.findById(id);
+        if (!item.isPresent()){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }else{
+            return ResponseEntity.ok(item.toString());
+        }
     }
 
-    public Iterable<Item> filter(String category, String pet, Double purchasePrice, Double sellingPrice){
-        return myItemRepository.filter(category, pet, purchasePrice, sellingPrice);
+    public ResponseEntity<String> filter(String category, String pet, Double purchasePrice, Double sellingPrice){
+        Iterable<Item> items = myItemRepository.filter(category, pet, purchasePrice, sellingPrice);
+        return ResponseEntity.ok(items.toString());
     }
 }

@@ -1,8 +1,8 @@
 package org.example.security;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.components.auth.User;
-import org.example.components.auth.UserService;
+import org.example.auth.User;
+import org.example.auth.UserService;
 import org.example.security.jwt.JwtUser;
 import org.example.security.jwt.JwtUserFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,8 @@
-package org.example.components.auth.dto;
+package org.example.auth.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import org.example.components.auth.User;
+import org.example.auth.User;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)

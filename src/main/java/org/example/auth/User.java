@@ -1,4 +1,4 @@
-package org.example.components.auth;
+package org.example.auth;
 
 import lombok.Data;
 import org.example.components.base.BaseEntity;

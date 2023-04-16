@@ -1,10 +1,9 @@
-package org.example.components.auth;
+package org.example.auth;
 
 
 
-import org.example.components.auth.dto.AuthenticationRequestDto;
-import org.example.components.auth.dto.RegistrationUserDto;
-import org.example.components.auth.dto.UserDto;
+import org.example.auth.dto.AuthenticationRequestDto;
+import org.example.auth.dto.RegistrationUserDto;
 import org.example.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

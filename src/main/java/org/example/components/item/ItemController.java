@@ -1,45 +1,49 @@
 package org.example.components.item;
 
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 @Controller
 @RestController
-@RequestMapping("/api/v1/users/items")
+@RequestMapping("/api/v1/items")
 public class ItemController {
     private final ItemService itemService;
     @Autowired
     public ItemController(ItemService itemService) {
         this.itemService = itemService;
     }
-
-    @GetMapping
-    public Iterable<Item> findAll(){
-        return itemService.findAll();
+    @GetMapping()
+    public ResponseEntity<String> filter(@RequestParam(name = "category", required = false) String category,
+                                         @RequestParam(name = "pet", required = false) String pet,
+                                         @RequestParam(name = "purchasePrice", required = false) Double purchasePrice,
+                                         @RequestParam(name = "sellingPrice", required = false) Double sellingPrice){
+        if (category != null || pet != null || purchasePrice != null || sellingPrice != null) {
+            return itemService.filter(category, pet, purchasePrice, sellingPrice);
+        }else{
+            return itemService.findAll();
+        }
     }
-
-    @PostMapping
-    public void save(@RequestBody Item item){
-        itemService.save(item);
-    }
-
-    @DeleteMapping
-    public void deleteById(@RequestParam Long id){
-        itemService.deleteById(id);
-    }
-
     @GetMapping("/{id}")
-    public Optional<Item> findById(@PathVariable Long id){
+    public ResponseEntity<String> findById(@PathVariable Long id){
         return itemService.findById(id);
     }
 
-    @GetMapping("/search")
-    public Iterable<Item> filter(@RequestParam(name = "category", required = false) String category,
-                                 @RequestParam(name = "pet", required = false) String pet,
-                                 @RequestParam(name = "purchasePrice", required = false) Double purchasePrice,
-                                 @RequestParam(name = "sellingPrice", required = false) Double sellingPrice){
-        return itemService.filter(category, pet, purchasePrice, sellingPrice);
+
+
+    @PostMapping
+    public ResponseEntity<String> save(@RequestBody Item item, @NonNull HttpServletRequest request){
+        return itemService.save(item, request);
     }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteById(@RequestParam Long id, @NonNull HttpServletRequest request){
+        return itemService.deleteById(id, request);
+    }
+
+
 }

@@ -34,10 +34,10 @@ public class MyItemRepository {
             predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(itemRoot.get("pet"), pet));
         }
         if (purchase_price != null){
-            predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(itemRoot.get("purchase_price"), purchase_price));
+            predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(itemRoot.get("purchasePrice"), purchase_price));
         }
         if (selling_price != null){
-            predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(itemRoot.get("selling_price"), selling_price));
+            predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(itemRoot.get("sellingPrice"), selling_price));
         }
 
 

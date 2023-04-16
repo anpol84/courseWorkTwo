@@ -1,8 +1,8 @@
 package org.example.security.jwt;
 
 
-import org.example.components.auth.Role;
-import org.example.components.auth.User;
+import org.example.auth.Role;
+import org.example.auth.User;
 import org.example.components.base.Status;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,4 +1,4 @@
-package org.example.components.auth.dto;
+package org.example.auth.dto;
 
 import lombok.Data;
 
