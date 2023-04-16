@@ -33,8 +33,9 @@ public class EmployeeController {
         return employeeService.findById(id, request);
     }
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody Employee employee, @NonNull HttpServletRequest request){
-        return employeeService.save(employee, request);
+    public ResponseEntity<String> save(@RequestBody Employee employee, @NonNull HttpServletRequest request,
+                                       @RequestParam Long shop_id){
+        return employeeService.save(employee, request, shop_id);
     }
     @DeleteMapping
     public ResponseEntity<String> deleteById(@RequestParam Long id, @NonNull HttpServletRequest request){

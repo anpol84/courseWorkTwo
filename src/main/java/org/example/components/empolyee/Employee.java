@@ -1,6 +1,8 @@
 package org.example.components.empolyee;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.example.components.shop.Shop;
 
 import javax.persistence.*;
 
@@ -21,6 +23,9 @@ public class Employee {
     private String email;
     private double salary;
     private String position;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
 
 
 }

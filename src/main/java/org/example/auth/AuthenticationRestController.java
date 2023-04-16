@@ -63,7 +63,6 @@ public class AuthenticationRestController {
     }
     @PostMapping("registry")
     public ResponseEntity registry(@RequestBody RegistrationUserDto registrationUserDto){
-        System.out.println("1");
         userService.register(registrationUserDto.toUser());
         AuthenticationRequestDto requestDto = new AuthenticationRequestDto(registrationUserDto.getUsername(),
                 registrationUserDto.getPassword());

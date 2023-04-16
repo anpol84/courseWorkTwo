@@ -1,6 +1,7 @@
 package org.example.components.item;
 
 import lombok.*;
+import org.example.components.shop.Shop;
 
 import javax.persistence.*;
 
@@ -22,4 +23,7 @@ public class Item {
     private double purchasePrice;
     @Column(name = "selling_price")
     private double sellingPrice;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
 }

@@ -54,7 +54,7 @@ public class UserService {
         User user = userRepository.findByUsername(username);
 
         for (Role role : user.getRoles()){
-            if (role.getId()==2) return true;
+            if (role.getName().equals("ROLE_ADMIN")) return true;
         }
         return false;
     }
@@ -119,5 +119,26 @@ public class UserService {
         String username = principal.getName();
         User user = userRepository.findByUsername(username);
         return user.getId();
+    }
+
+    public ResponseEntity<String> registryAdmin(User user, HttpServletRequest request){
+        if (!checkAdmin(request)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
+        Role roleUser = roleRepository.findByName("ROLE_USER");
+        Role roleUser2 = roleRepository.findByName("ROLE_ADMIN");
+        List<Role> userRoles = new ArrayList<>();
+        userRoles.add(roleUser);
+        userRoles.add(roleUser2);
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(userRoles);
+        user.setStatus(Status.ACTIVE);
+
+        User registeredUser = userRepository.save(user);
+
+        log.info("IN register - user: {} successfully registered", registeredUser);
+
+        return new ResponseEntity<>(registeredUser.toString(), HttpStatus.OK);
     }
 }

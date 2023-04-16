@@ -1,6 +1,7 @@
 package org.example.components.pet;
 
 import lombok.*;
+import org.example.components.shop.Shop;
 
 import javax.persistence.*;
 
@@ -21,4 +22,7 @@ public class Pet {
     private String gender;
     private String color;
     private double price;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
 }

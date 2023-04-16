@@ -125,6 +125,9 @@
             <column name="selling_price" type="FLOAT">
                 <constraints nullable="false"/>
             </column>
+            <column name="shop_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
         </createTable>
     </changeSet>
     <changeSet id="1.0.7" author="anpol84">
@@ -151,6 +154,10 @@
             <column name="position" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="shop_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+
         </createTable>
     </changeSet>
     <changeSet id="1.0.8" author="anpol84">
@@ -181,7 +188,52 @@
             <column name="price" type="FLOAT">
                 <constraints nullable="false"/>
             </column>
+            <column name="shop_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
 
         </createTable>
+    </changeSet>
+    <changeSet id="1.0.9" author="anpol84">
+        <createTable tableName="shops">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="address" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+
+
+        </createTable>
+    </changeSet>
+    <changeSet id="1.0.10" author="username">
+        <addForeignKeyConstraint baseTableName="employees"
+                                 baseColumnNames="shop_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedTableName="shops"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_employees_shops"/>
+    </changeSet>
+    <changeSet id="1.0.11" author="username">
+        <addForeignKeyConstraint baseTableName="items"
+                                 baseColumnNames="shop_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedTableName="shops"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_items_shops"/>
+    </changeSet>
+    <changeSet id="1.0.12" author="username">
+        <addForeignKeyConstraint baseTableName="pets"
+                                 baseColumnNames="shop_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedTableName="shops"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_pets_shops"/>
     </changeSet>
 </databaseChangeLog>

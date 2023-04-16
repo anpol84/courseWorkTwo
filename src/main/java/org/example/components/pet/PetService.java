@@ -2,12 +2,15 @@ package org.example.components.pet;
 
 import org.example.auth.UserService;
 import org.example.components.item.Item;
+import org.example.components.item.ItemDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,8 +26,12 @@ public class PetService {
     }
 
     public ResponseEntity<String> findAll(){
-        Iterable<Pet> pets =petRepository.findAll();
-        return ResponseEntity.ok(pets.toString());
+        Iterable<Pet> pets = petRepository.findAll();
+        List<PetDto> pets2 = new ArrayList<>();
+        for (Pet pet : pets){
+            pets2.add(PetDto.fromPet(pet));
+        }
+        return ResponseEntity.ok(pets2.toString());
     }
 
     public ResponseEntity<String> save(Pet pet, HttpServletRequest request){
@@ -48,13 +55,17 @@ public class PetService {
         if (!pet.isPresent()){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }else{
-            return ResponseEntity.ok(pet.toString());
+            return ResponseEntity.ok(PetDto.fromPet(pet.get()).toString());
         }
     }
 
     public ResponseEntity<String> filter(String kind, Double weight, String alias, String gender, String color,
                                          Double price){
         Iterable<Pet> pets =  myPetRepository.filter(kind, weight, alias, gender, color, price);
-        return ResponseEntity.ok(pets.toString());
+        List<PetDto> pets2 = new ArrayList<>();
+        for (Pet pet : pets){
+            pets2.add(PetDto.fromPet(pet));
+        }
+        return ResponseEntity.ok(pets2.toString());
     }
 }

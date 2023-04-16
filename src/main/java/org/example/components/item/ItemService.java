@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,7 +29,11 @@ public class ItemService {
 
     public ResponseEntity<String> findAll(){
         Iterable<Item> items = itemRepository.findAll();
-        return ResponseEntity.ok(items.toString());
+        List<ItemDto> items2 = new ArrayList<>();
+        for (Item item : items){
+            items2.add(ItemDto.fromItem(item));
+        }
+        return ResponseEntity.ok(items2.toString());
     }
 
     public ResponseEntity<String> save(Item item, HttpServletRequest request){
@@ -51,12 +57,16 @@ public class ItemService {
         if (!item.isPresent()){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }else{
-            return ResponseEntity.ok(item.toString());
+            return ResponseEntity.ok((ItemDto.fromItem(item.get())).toString());
         }
     }
 
     public ResponseEntity<String> filter(String category, String pet, Double purchasePrice, Double sellingPrice){
         Iterable<Item> items = myItemRepository.filter(category, pet, purchasePrice, sellingPrice);
-        return ResponseEntity.ok(items.toString());
+        List<ItemDto> items2 = new ArrayList<>();
+        for (Item item : items){
+            items2.add(ItemDto.fromItem(item));
+        }
+        return ResponseEntity.ok(items2.toString());
     }
 }
