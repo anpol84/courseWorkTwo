@@ -1,4 +1,4 @@
-package org.example.components.kind;
+package org.example.components.category;
 
 import lombok.Data;
 import org.example.components.item.Item;
@@ -9,22 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "kinds")
+@Table(name = "categories")
 @Data
-public class Kind {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @Column(name = "eating_way")
-    private String eatingWay;
-    @Column(name = "climate_zone")
-    private String climateZone;
+    @Column(name="average_size")
+    String averageSize;
 
-    private String order;
-    @OneToMany(mappedBy = "kind")
-    private List<Pet> pets = new ArrayList<>();
-    @OneToMany(mappedBy = "kind")
+    String purpose;
+    @OneToMany(mappedBy = "category")
     private List<Item> items = new ArrayList<>();
+
 
 }

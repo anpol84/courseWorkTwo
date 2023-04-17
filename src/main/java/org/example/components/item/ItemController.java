@@ -19,11 +19,10 @@ public class ItemController {
     }
     @GetMapping()
     public ResponseEntity<String> filter(@RequestParam(name = "category", required = false) String category,
-                                         @RequestParam(name = "pet", required = false) String pet,
                                          @RequestParam(name = "purchasePrice", required = false) Double purchasePrice,
                                          @RequestParam(name = "sellingPrice", required = false) Double sellingPrice){
-        if (category != null || pet != null || purchasePrice != null || sellingPrice != null) {
-            return itemService.filter(category, pet, purchasePrice, sellingPrice);
+        if (category != null  || purchasePrice != null || sellingPrice != null) {
+            return itemService.filter(category, purchasePrice, sellingPrice);
         }else{
             return itemService.findAll();
         }
@@ -37,8 +36,8 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<String> save(@RequestBody Item item, @NonNull HttpServletRequest request,
-                                       @RequestParam Long shop_id){
-        return itemService.save(item, request, shop_id);
+                                       @RequestParam Long shop_id, @RequestParam Long kind_id){
+        return itemService.save(item, request, shop_id, kind_id);
     }
 
     @DeleteMapping

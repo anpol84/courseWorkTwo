@@ -1,4 +1,4 @@
-package org.example.components.item;
+package org.example.components.category;
 
 import org.example.components.empolyee.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,28 +14,30 @@ import javax.persistence.criteria.Root;
 import javax.sql.DataSource;
 
 @Repository
-public class MyItemRepository {
+public class MyCategoryRepository {
     @PersistenceContext
     private EntityManager entityManager;
     private JdbcTemplate jdbcTemplate;
     @Autowired
-    public MyItemRepository(DataSource dataSource) {
+    public MyCategoryRepository(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
-    public Iterable<Item> filter(String category, Double purchase_price, Double selling_price){
+    public Iterable<Category> filter(String name, String purpose, String averageSize){
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Item> criteriaQuery = criteriaBuilder.createQuery(Item.class);
-        Root<Item> itemRoot = criteriaQuery.from(Item.class);
+        CriteriaQuery<Category> criteriaQuery = criteriaBuilder.createQuery(Category.class);
+        Root<Category> categoryRoot = criteriaQuery.from(Category.class);
         Predicate predicate = criteriaBuilder.conjunction();
-        if (category!= null && !category.isEmpty()){
-            predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(itemRoot.get("category"), category));
+        if (name!= null && !name.isEmpty()){
+            predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(categoryRoot.get("name"), name));
         }
-        if (purchase_price != null){
-            predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(itemRoot.get("purchasePrice"), purchase_price));
+        if (purpose != null && !purpose.isEmpty()){
+            predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(categoryRoot.get("purpose"), purpose));
         }
-        if (selling_price != null){
-            predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(itemRoot.get("sellingPrice"), selling_price));
+        if (averageSize != null && !averageSize.isEmpty()){
+            predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(categoryRoot.get("averageSize"), averageSize));
         }
+
+
 
         criteriaQuery.where(predicate);
         return entityManager.createQuery(criteriaQuery).getResultList();

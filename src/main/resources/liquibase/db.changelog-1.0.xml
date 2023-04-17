@@ -114,9 +114,6 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="pet" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
 
             <column name="purchase_price" type="FLOAT">
                 <constraints nullable="false"/>
@@ -128,6 +125,12 @@
             <column name="shop_id" type="BIGINT">
                 <constraints nullable="true" unique="true"/>
             </column>
+            <column name="kind_id" type="BIGINT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="category_id" type="BIGINT">
+                <constraints nullable="false" unique="true"/>
+             </column>
         </createTable>
     </changeSet>
     <changeSet id="1.0.7" author="anpol84">
@@ -317,5 +320,43 @@
                                  referencedTableName="kinds"
                                  referencedColumnNames="id"
                                  constraintName="fk_pets_kinds"/>
+    </changeSet>
+    <changeSet id="1.0.18" author="username">
+        <addForeignKeyConstraint baseTableName="items"
+                                 baseColumnNames="kind_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedTableName="kinds"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_items_kinds"/>
+    </changeSet>
+    <changeSet id="1.0.19" author="anpol84">
+        <createTable tableName="categories">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="average_size" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="purpose" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+    <changeSet id="1.0.20" author="username">
+        <addForeignKeyConstraint baseTableName="items"
+                                 baseColumnNames="category_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedTableName="categories"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_items_categories"/>
     </changeSet>
 </databaseChangeLog>

@@ -10,17 +10,15 @@ import javax.persistence.Column;
 public class ItemDto {
     private Long id;
     private String category;
-    private String pet;
     private double purchasePrice;
     private double sellingPrice;
     private String shopAddress;
+    private String kind;
 
     private String shopPhone;
     public Item toItem(){
         Item item = new Item();
         item.setId(id);
-        item.setCategory(category);
-        item.setPet(pet);
         item.setPurchasePrice(purchasePrice);
         item.setSellingPrice(sellingPrice);
         return item;
@@ -28,8 +26,8 @@ public class ItemDto {
     public static ItemDto fromItem(Item item){
         ItemDto itemDto = new ItemDto();
         itemDto.setId(item.getId());
-        itemDto.setCategory(item.getCategory());
-        itemDto.setPet(item.getPet());
+        itemDto.setCategory(item.getCategory().getName());
+        itemDto.setKind(item.getKind().getName());
         itemDto.setPurchasePrice(item.getPurchasePrice());
         itemDto.setSellingPrice(item.getSellingPrice());
         itemDto.setShopAddress(item.getShop().getAddress().toString());
