@@ -21,12 +21,12 @@ public class ShopController {
                                            @RequestParam(name = "phone", required = false) String phone,
                                            @NonNull HttpServletRequest request){
         if (phone != null || address != null){
-            return shopService.filter(address, phone);
+            return shopService.filter(address, phone, request);
         }
         return shopService.findAll(request);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<String> findById(@RequestParam Long id, @NonNull HttpServletRequest request){
+    public ResponseEntity<String> findById(@PathVariable Long id, @NonNull HttpServletRequest request){
         return shopService.findById(id, request);
     }
 

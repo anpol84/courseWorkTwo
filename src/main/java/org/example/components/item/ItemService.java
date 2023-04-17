@@ -3,6 +3,7 @@ package org.example.components.item;
 import org.example.auth.User;
 import org.example.auth.UserService;
 import org.example.components.empolyee.Employee;
+import org.example.components.shop.ShopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
@@ -19,12 +20,14 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final MyItemRepository myItemRepository;
     private final UserService userService;
+    private final ShopRepository shopRepository;
     @Autowired
     public ItemService(ItemRepository itemRepository, MyItemRepository myItemRepository,
-                       UserService userService) {
+                       UserService userService, ShopRepository shopRepository) {
         this.itemRepository = itemRepository;
         this.myItemRepository = myItemRepository;
         this.userService = userService;
+        this.shopRepository = shopRepository;
     }
 
     public ResponseEntity<String> findAll(){
@@ -36,10 +39,11 @@ public class ItemService {
         return ResponseEntity.ok(items2.toString());
     }
 
-    public ResponseEntity<String> save(Item item, HttpServletRequest request){
+    public ResponseEntity<String> save(Item item, HttpServletRequest request, Long shop_id){
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
+        item.setShop(shopRepository.getById(shop_id));
         itemRepository.save(item);
         return ResponseEntity.ok("Saved");
     }

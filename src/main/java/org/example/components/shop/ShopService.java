@@ -34,6 +34,14 @@ public class ShopService {
     }
 
     public ResponseEntity<String> findAll(HttpServletRequest request){
+        if (!userService.checkAdmin(request)) {
+            Iterable<Shop> shops = shopRepository.findAll();
+            List<ShopUsersDto> shops2 = new ArrayList<>();
+            for (Shop shop : shops){
+                shops2.add(ShopUsersDto.fromShop(shop));
+            }
+            return new ResponseEntity<>(shops2.toString(), HttpStatus.OK);
+        }
         Iterable<Shop> shops = shopRepository.findAll();
         List<ShopDto> shops2 = new ArrayList<>();
         for (Shop shop : shops){
@@ -41,7 +49,7 @@ public class ShopService {
         }
         return new ResponseEntity<>(shops2.toString(), HttpStatus.OK);
     }
-
+    @Transactional
     public ResponseEntity<String> deleteById(Long id, HttpServletRequest request){
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
@@ -55,12 +63,22 @@ public class ShopService {
         if (!shop.isPresent()){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }else{
+            if (!userService.checkAdmin(request)) {
+                return ResponseEntity.ok(ShopUsersDto.fromShop(shop.get()).toString());
+            }
             return ResponseEntity.ok(ShopDto.fromShop(shop.get()).toString());
         }
     }
 
-    public ResponseEntity<String> filter(String address, String phone){
+    public ResponseEntity<String> filter(String address, String phone, HttpServletRequest request){
         Iterable<Shop> shops = myShopRepository.filter(address, phone);
+        if (!userService.checkAdmin(request)) {
+            List<ShopUsersDto> shops2 = new ArrayList<>();
+            for (Shop shop : shops){
+                shops2.add(ShopUsersDto.fromShop(shop));
+            }
+            return new ResponseEntity<>(shops2.toString(), HttpStatus.OK);
+        }
         List<ShopDto> shops2 = new ArrayList<>();
         for (Shop shop : shops){
             shops2.add(ShopDto.fromShop(shop));

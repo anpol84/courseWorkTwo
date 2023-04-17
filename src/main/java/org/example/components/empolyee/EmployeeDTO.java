@@ -13,6 +13,9 @@ public class EmployeeDTO {
     private String email;
     private double salary;
     private String position;
+    private String shopAddress;
+
+    private String shopPhone;
 
     public Employee toEmployee(){
         Employee employee = new Employee();
@@ -32,6 +35,8 @@ public class EmployeeDTO {
         employeeDTO.setPhone(employee.getPhone());
         employeeDTO.setEmail(employee.getEmail());
         employeeDTO.setPosition(employee.getPosition());
+        employeeDTO.setShopAddress(employee.getShop().getAddress());
+        employeeDTO.setShopPhone(employee.getShop().getPhone());
         return employeeDTO;
     }
 }

@@ -36,8 +36,9 @@ public class PetController {
 
 
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody Pet pet, @NonNull HttpServletRequest request){
-        return petService.save(pet, request);
+    public ResponseEntity<String> save(@RequestBody Pet pet, @NonNull HttpServletRequest request,
+                                       @RequestParam Long shop_id){
+        return petService.save(pet, request, shop_id);
     }
 
     @DeleteMapping

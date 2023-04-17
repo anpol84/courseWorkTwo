@@ -14,11 +14,10 @@ import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ShopDto {
+public class ShopUsersDto {
     private Long id;
     private String address;
     private String phone;
-    private List<EmployeeDTO> employees = new ArrayList<>();
     private List<PetDto> pets = new ArrayList<>();
     private List<ItemDto> items = new ArrayList<>();
     public Shop toShop(){
@@ -29,24 +28,20 @@ public class ShopDto {
         return shop;
     }
 
-    public static ShopDto fromShop(Shop shop){
-        ShopDto shopDto = new ShopDto();
+    public static ShopUsersDto fromShop(Shop shop){
+        ShopUsersDto shopDto = new ShopUsersDto();
         shopDto.setId(shop.getId());
         shopDto.setAddress(shop.getAddress());
         shopDto.setPhone(shop.getPhone());
-        List<EmployeeDTO> employees = new ArrayList<>();
         List<PetDto> pets = new ArrayList<>();
         List<ItemDto> items = new ArrayList<>();
-        for (Employee employee : shop.getEmployees()){
-            employees.add(EmployeeDTO.fromEmployee(employee));
-        }
+
         for (Pet pet : shop.getPets()){
             pets.add(PetDto.fromPet(pet));
         }
         for (Item item : shop.getItems()){
             items.add(ItemDto.fromItem(item));
         }
-        shopDto.setEmployees(employees);
         shopDto.setItems(items);
         shopDto.setPets(pets);
         return shopDto;

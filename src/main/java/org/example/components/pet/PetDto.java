@@ -14,11 +14,16 @@ public class PetDto {
     private String color;
     private double price;
 
+    private String shopAddress;
+
+    private String shopPhone;
+
     public Pet toPet(){
         Pet pet = new Pet();
         pet.setId(id);
         pet.setKind(kind);
         pet.setAlias(alias);
+        pet.setWeight(weight);
         pet.setGender(gender);
         pet.setColor(color);
         pet.setPrice(price);
@@ -30,9 +35,12 @@ public class PetDto {
         petDto.setId(pet.getId());
         petDto.setKind(pet.getKind());
         petDto.setAlias(pet.getAlias());
+        petDto.setWeight(pet.getWeight());
         petDto.setGender(pet.getGender());
         petDto.setColor(pet.getColor());
         petDto.setPrice(pet.getPrice());
+        petDto.setShopAddress(pet.getShop().getAddress());
+        petDto.setShopPhone(pet.getShop().getPhone());
         return petDto;
     }
 

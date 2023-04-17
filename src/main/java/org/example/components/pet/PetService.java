@@ -3,6 +3,7 @@ package org.example.components.pet;
 import org.example.auth.UserService;
 import org.example.components.item.Item;
 import org.example.components.item.ItemDto;
+import org.example.components.shop.ShopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,14 @@ public class PetService {
     private final PetRepository petRepository;
     private final MyPetRepository myPetRepository;
     private final UserService userService;
+    private final ShopRepository shopRepository;
     @Autowired
-    public PetService(PetRepository petRepository, MyPetRepository myPetRepository, UserService userService) {
+    public PetService(PetRepository petRepository, MyPetRepository myPetRepository,
+                      UserService userService, ShopRepository shopRepository) {
         this.petRepository = petRepository;
         this.myPetRepository = myPetRepository;
         this.userService = userService;
+        this.shopRepository = shopRepository;
     }
 
     public ResponseEntity<String> findAll(){
@@ -34,10 +38,11 @@ public class PetService {
         return ResponseEntity.ok(pets2.toString());
     }
 
-    public ResponseEntity<String> save(Pet pet, HttpServletRequest request){
+    public ResponseEntity<String> save(Pet pet, HttpServletRequest request, Long shop_id){
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
+        pet.setShop(shopRepository.getById(shop_id));
         petRepository.save(pet);
         return ResponseEntity.ok("Saved");
     }

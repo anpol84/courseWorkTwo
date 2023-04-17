@@ -13,6 +13,9 @@ public class ItemDto {
     private String pet;
     private double purchasePrice;
     private double sellingPrice;
+    private String shopAddress;
+
+    private String shopPhone;
     public Item toItem(){
         Item item = new Item();
         item.setId(id);
@@ -29,6 +32,8 @@ public class ItemDto {
         itemDto.setPet(item.getPet());
         itemDto.setPurchasePrice(item.getPurchasePrice());
         itemDto.setSellingPrice(item.getSellingPrice());
+        itemDto.setShopAddress(item.getShop().getAddress());
+        itemDto.setShopPhone(item.getShop().getPhone());
         return itemDto;
     }
 }
