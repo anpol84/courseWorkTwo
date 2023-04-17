@@ -22,7 +22,7 @@ public class ShopUsersDto {
     private List<ItemDto> items = new ArrayList<>();
     public Shop toShop(){
         Shop shop = new Shop();
-        shop.setAddress(address);
+
         shop.setId(id);
         shop.setPhone(phone);
         return shop;
@@ -31,7 +31,11 @@ public class ShopUsersDto {
     public static ShopUsersDto fromShop(Shop shop){
         ShopUsersDto shopDto = new ShopUsersDto();
         shopDto.setId(shop.getId());
-        shopDto.setAddress(shop.getAddress());
+        if (shop.getAddress() != null) {
+            shopDto.setAddress(shop.getAddress().toString());
+        }else{
+            shopDto.setAddress("[]");
+        }
         shopDto.setPhone(shop.getPhone());
         List<PetDto> pets = new ArrayList<>();
         List<ItemDto> items = new ArrayList<>();

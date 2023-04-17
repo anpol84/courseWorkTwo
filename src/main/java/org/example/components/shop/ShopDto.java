@@ -23,7 +23,6 @@ public class ShopDto {
     private List<ItemDto> items = new ArrayList<>();
     public Shop toShop(){
         Shop shop = new Shop();
-        shop.setAddress(address);
         shop.setId(id);
         shop.setPhone(phone);
         return shop;
@@ -32,19 +31,32 @@ public class ShopDto {
     public static ShopDto fromShop(Shop shop){
         ShopDto shopDto = new ShopDto();
         shopDto.setId(shop.getId());
-        shopDto.setAddress(shop.getAddress());
+        if (shop.getAddress() != null) {
+            shopDto.setAddress(shop.getAddress().toString());
+        }else{
+            shopDto.setAddress("[]");
+        }
         shopDto.setPhone(shop.getPhone());
         List<EmployeeDTO> employees = new ArrayList<>();
         List<PetDto> pets = new ArrayList<>();
         List<ItemDto> items = new ArrayList<>();
         for (Employee employee : shop.getEmployees()){
-            employees.add(EmployeeDTO.fromEmployee(employee));
+            EmployeeDTO employeeDTO = EmployeeDTO.fromEmployee(employee);
+            employeeDTO.setShopAddress("[]");
+            employeeDTO.setShopPhone("[]");
+            employees.add(employeeDTO);
         }
         for (Pet pet : shop.getPets()){
-            pets.add(PetDto.fromPet(pet));
+            PetDto petDto = PetDto.fromPet(pet);
+            petDto.setShopPhone("[]");
+            petDto.setShopAddress("[]");
+            pets.add(petDto);
         }
         for (Item item : shop.getItems()){
-            items.add(ItemDto.fromItem(item));
+            ItemDto itemDto = ItemDto.fromItem(item);
+            itemDto.setShopPhone("[]");
+            itemDto.setShopAddress("[]");
+            items.add(itemDto);
         }
         shopDto.setEmployees(employees);
         shopDto.setItems(items);

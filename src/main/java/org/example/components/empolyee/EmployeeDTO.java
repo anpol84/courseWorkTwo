@@ -3,6 +3,7 @@ package org.example.components.empolyee;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import liquibase.pro.packaged.E;
 import lombok.Data;
+import org.example.components.address.AddressDto;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -16,6 +17,8 @@ public class EmployeeDTO {
     private String shopAddress;
 
     private String shopPhone;
+    private String address;
+
 
     public Employee toEmployee(){
         Employee employee = new Employee();
@@ -29,14 +32,21 @@ public class EmployeeDTO {
 
     public static EmployeeDTO fromEmployee(Employee employee){
         EmployeeDTO employeeDTO = new EmployeeDTO();
+
         employeeDTO.setId(employee.getId());
         employeeDTO.setName(employee.getName());
         employeeDTO.setSalary(employee.getSalary());
         employeeDTO.setPhone(employee.getPhone());
         employeeDTO.setEmail(employee.getEmail());
         employeeDTO.setPosition(employee.getPosition());
-        employeeDTO.setShopAddress(employee.getShop().getAddress());
+        employeeDTO.setShopAddress(employee.getShop().getAddress().toString());
         employeeDTO.setShopPhone(employee.getShop().getPhone());
+        if (employee.getAddress() != null){
+            employeeDTO.setAddress(employee.getAddress().toString());
+        }else{
+            employeeDTO.setAddress("[]");
+        }
+
         return employeeDTO;
     }
 }

@@ -39,7 +39,7 @@ public class PetDto {
         petDto.setGender(pet.getGender());
         petDto.setColor(pet.getColor());
         petDto.setPrice(pet.getPrice());
-        petDto.setShopAddress(pet.getShop().getAddress());
+        petDto.setShopAddress(pet.getShop().getAddress().toString());
         petDto.setShopPhone(pet.getShop().getPhone());
         return petDto;
     }

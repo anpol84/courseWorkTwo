@@ -32,7 +32,7 @@ public class ItemDto {
         itemDto.setPet(item.getPet());
         itemDto.setPurchasePrice(item.getPurchasePrice());
         itemDto.setSellingPrice(item.getSellingPrice());
-        itemDto.setShopAddress(item.getShop().getAddress());
+        itemDto.setShopAddress(item.getShop().getAddress().toString());
         itemDto.setShopPhone(item.getShop().getPhone());
         return itemDto;
     }
