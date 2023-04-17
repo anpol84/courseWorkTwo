@@ -17,11 +17,11 @@ public class ShopController {
     }
 
     @GetMapping
-    public ResponseEntity<String> getShops(@RequestParam(name = "address", required = false) String address,
+    public ResponseEntity<String> getShops(@RequestParam(name = "head", required = false) String head,
                                            @RequestParam(name = "phone", required = false) String phone,
                                            @NonNull HttpServletRequest request){
-        if (phone != null || address != null){
-            return shopService.filter(address, phone, request);
+        if (phone != null || head != null){
+            return shopService.filter(head, phone, request);
         }
         return shopService.findAll(request);
     }

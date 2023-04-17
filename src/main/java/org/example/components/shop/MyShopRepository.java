@@ -22,13 +22,13 @@ public class MyShopRepository {
     public MyShopRepository(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
-    public Iterable<Shop> filter(String address, String phone){
+    public Iterable<Shop> filter(String head, String phone){
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Shop> criteriaQuery = criteriaBuilder.createQuery(Shop.class);
         Root<Shop> shopRoot = criteriaQuery.from(Shop.class);
         Predicate predicate = criteriaBuilder.conjunction();
-        if (address!= null && !address.isEmpty()){
-            predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(shopRoot.get("address"), address));
+        if (head!= null && !head.isEmpty()){
+            predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(shopRoot.get("head"), head));
         }
         if (phone != null && !phone.isEmpty()){
             predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(shopRoot.get("phone"), phone));

@@ -3,6 +3,7 @@ package org.example.components.pet;
 import org.example.auth.UserService;
 import org.example.components.item.Item;
 import org.example.components.item.ItemDto;
+import org.example.components.kind.KindRepository;
 import org.example.components.shop.ShopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,13 +21,16 @@ public class PetService {
     private final MyPetRepository myPetRepository;
     private final UserService userService;
     private final ShopRepository shopRepository;
+    private final KindRepository kindRepository;
     @Autowired
     public PetService(PetRepository petRepository, MyPetRepository myPetRepository,
-                      UserService userService, ShopRepository shopRepository) {
+                      UserService userService, ShopRepository shopRepository,
+                      KindRepository kindRepository) {
         this.petRepository = petRepository;
         this.myPetRepository = myPetRepository;
         this.userService = userService;
         this.shopRepository = shopRepository;
+        this.kindRepository = kindRepository;
     }
 
     public ResponseEntity<String> findAll(){
@@ -38,11 +42,12 @@ public class PetService {
         return ResponseEntity.ok(pets2.toString());
     }
 
-    public ResponseEntity<String> save(Pet pet, HttpServletRequest request, Long shop_id){
+    public ResponseEntity<String> save(Pet pet, HttpServletRequest request, Long shop_id, Long kind_id){
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
         pet.setShop(shopRepository.getById(shop_id));
+        pet.setKind(kindRepository.getById(kind_id));
         petRepository.save(pet);
         return ResponseEntity.ok("Saved");
     }
@@ -64,9 +69,9 @@ public class PetService {
         }
     }
 
-    public ResponseEntity<String> filter(String kind, Double weight, String alias, String gender, String color,
+    public ResponseEntity<String> filter(Double weight, String alias, String gender, String color,
                                          Double price){
-        Iterable<Pet> pets =  myPetRepository.filter(kind, weight, alias, gender, color, price);
+        Iterable<Pet> pets =  myPetRepository.filter(weight, alias, gender, color, price);
         List<PetDto> pets2 = new ArrayList<>();
         for (Pet pet : pets){
             pets2.add(PetDto.fromPet(pet));

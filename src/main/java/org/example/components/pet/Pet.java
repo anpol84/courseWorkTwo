@@ -1,6 +1,7 @@
 package org.example.components.pet;
 
 import lombok.*;
+import org.example.components.kind.Kind;
 import org.example.components.shop.Shop;
 
 import javax.persistence.*;
@@ -16,7 +17,9 @@ public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String kind;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "kind_id")
+    private Kind kind;
     private double weight;
     private String alias;
     private String gender;

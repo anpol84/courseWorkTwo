@@ -17,14 +17,13 @@ public class PetController {
     }
 
     @GetMapping("")
-    public ResponseEntity<String> filter(@RequestParam(name = "kind", required = false) String kind,
-                                         @RequestParam(name = "weight", required = false) Double weight,
+    public ResponseEntity<String> filter(@RequestParam(name = "weight", required = false) Double weight,
                                          @RequestParam(name = "alias", required = false) String alias,
                                          @RequestParam(name = "gender", required = false) String gender,
                                          @RequestParam(name = "color", required = false) String color,
                                          @RequestParam(name = "price", required = false) Double price){
-        if (kind != null || weight != null || alias != null || gender != null || color != null || price != null){
-            return petService.filter(kind, weight, alias, gender, color, price);
+        if  (weight != null || alias != null || gender != null || color != null || price != null){
+            return petService.filter(weight, alias, gender, color, price);
         }
         return petService.findAll();
     }
@@ -37,8 +36,8 @@ public class PetController {
 
     @PostMapping
     public ResponseEntity<String> save(@RequestBody Pet pet, @NonNull HttpServletRequest request,
-                                       @RequestParam Long shop_id){
-        return petService.save(pet, request, shop_id);
+                                       @RequestParam Long shop_id, @RequestParam Long kind_id){
+        return petService.save(pet, request, shop_id, kind_id);
     }
 
     @DeleteMapping

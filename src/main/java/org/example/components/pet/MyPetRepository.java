@@ -22,14 +22,12 @@ public class MyPetRepository {
     public MyPetRepository(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
-    public Iterable<Pet> filter(String kind, Double weight, String alias, String gender, String color, Double price){
+    public Iterable<Pet> filter(Double weight, String alias, String gender, String color, Double price){
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Pet> criteriaQuery = criteriaBuilder.createQuery(Pet.class);
         Root<Pet> petRoot = criteriaQuery.from(Pet.class);
         Predicate predicate = criteriaBuilder.conjunction();
-        if (kind!= null && !kind.isEmpty()){
-            predicate = criteriaBuilder.and(predicate, criteriaBuilder.like(petRoot.get("kind"), kind));
-        }
+
         if (weight != null){
             predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(petRoot.get("weight"), weight));
         }

@@ -24,6 +24,7 @@ public class Shop {
     @OneToOne(mappedBy = "shop")
     private Address address;
     private String phone;
+    private String head;
     @OneToMany(mappedBy = "shop")
     private List<Employee> employees = new ArrayList<>();
 

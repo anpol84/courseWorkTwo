@@ -70,8 +70,8 @@ public class ShopService {
         }
     }
 
-    public ResponseEntity<String> filter(String address, String phone, HttpServletRequest request){
-        Iterable<Shop> shops = myShopRepository.filter(address, phone);
+    public ResponseEntity<String> filter(String head, String phone, HttpServletRequest request){
+        Iterable<Shop> shops = myShopRepository.filter(head, phone);
         if (!userService.checkAdmin(request)) {
             List<ShopUsersDto> shops2 = new ArrayList<>();
             for (Shop shop : shops){

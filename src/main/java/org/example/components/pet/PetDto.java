@@ -21,7 +21,6 @@ public class PetDto {
     public Pet toPet(){
         Pet pet = new Pet();
         pet.setId(id);
-        pet.setKind(kind);
         pet.setAlias(alias);
         pet.setWeight(weight);
         pet.setGender(gender);
@@ -33,7 +32,7 @@ public class PetDto {
     public static PetDto fromPet(Pet pet){
         PetDto petDto = new PetDto();
         petDto.setId(pet.getId());
-        petDto.setKind(pet.getKind());
+        petDto.setKind(pet.getKind().getName());
         petDto.setAlias(pet.getAlias());
         petDto.setWeight(pet.getWeight());
         petDto.setGender(pet.getGender());

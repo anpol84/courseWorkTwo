@@ -166,9 +166,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
 
-            <column name="kind" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
+
             <column name="weight" type="FLOAT">
                 <constraints nullable="false"/>
             </column>
@@ -191,6 +189,9 @@
             <column name="shop_id" type="BIGINT">
                 <constraints nullable="true" unique="true"/>
             </column>
+            <column name="kind_id" type="BIGINT">
+                <constraints nullable="false" unique="true"/>
+            </column>
 
         </createTable>
     </changeSet>
@@ -200,6 +201,9 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="phone" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="head" type="varchar(20)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -280,5 +284,38 @@
                                  referencedTableName="shops"
                                  referencedColumnNames="id"
                                  constraintName="fk_addresses_shops"/>
+    </changeSet>
+    <changeSet id="1.0.16" author="anpol84">
+        <createTable tableName="kinds">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="eating_way" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="climate_zone" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="order" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+    <changeSet id="1.0.17" author="username">
+        <addForeignKeyConstraint baseTableName="pets"
+                                 baseColumnNames="kind_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedTableName="kinds"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_pets_kinds"/>
     </changeSet>
 </databaseChangeLog>

@@ -18,6 +18,7 @@ public class ShopDto {
     private Long id;
     private String address;
     private String phone;
+    private String head;
     private List<EmployeeDTO> employees = new ArrayList<>();
     private List<PetDto> pets = new ArrayList<>();
     private List<ItemDto> items = new ArrayList<>();
@@ -25,6 +26,7 @@ public class ShopDto {
         Shop shop = new Shop();
         shop.setId(id);
         shop.setPhone(phone);
+        shop.setHead(head);
         return shop;
     }
 
@@ -37,6 +39,7 @@ public class ShopDto {
             shopDto.setAddress("[]");
         }
         shopDto.setPhone(shop.getPhone());
+        shopDto.setHead(shop.getHead());
         List<EmployeeDTO> employees = new ArrayList<>();
         List<PetDto> pets = new ArrayList<>();
         List<ItemDto> items = new ArrayList<>();
