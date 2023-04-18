@@ -36,8 +36,10 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<String> save(@RequestBody Item item, @NonNull HttpServletRequest request,
-                                       @RequestParam Long shop_id, @RequestParam Long kind_id){
-        return itemService.save(item, request, shop_id, kind_id);
+                                       @RequestParam(name = "shop_id") Long shop_id,
+                                       @RequestParam(name = "kind_id") Long kind_id,
+                                       @RequestParam(name = "category_id") Long category_id){
+        return itemService.save(item, request, shop_id, kind_id, category_id);
     }
 
     @DeleteMapping

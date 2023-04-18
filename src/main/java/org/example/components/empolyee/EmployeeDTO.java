@@ -39,13 +39,25 @@ public class EmployeeDTO {
         employeeDTO.setPhone(employee.getPhone());
         employeeDTO.setEmail(employee.getEmail());
         employeeDTO.setPosition(employee.getPosition());
-        employeeDTO.setShopAddress(employee.getShop().getAddress().toString());
-        employeeDTO.setShopPhone(employee.getShop().getPhone());
         if (employee.getAddress() != null){
             employeeDTO.setAddress(employee.getAddress().toString());
         }else{
             employeeDTO.setAddress("[]");
         }
+        if (employee.getShop() == null){
+            employeeDTO.setShopAddress("[]");
+            employeeDTO.setShopPhone("[]");
+
+            return employeeDTO;
+        }
+        if (employee.getShop().getAddress() != null){
+            employeeDTO.setShopAddress(employee.getShop().getAddress().toString());
+        }else{
+            employeeDTO.setShopAddress("[]");
+        }
+
+        employeeDTO.setShopPhone(employee.getShop().getPhone());
+
 
         return employeeDTO;
     }

@@ -20,7 +20,7 @@ public class Kind {
     private String eatingWay;
     @Column(name = "climate_zone")
     private String climateZone;
-
+    @Column(name = "order_kind")
     private String order;
     @OneToMany(mappedBy = "kind")
     private List<Pet> pets = new ArrayList<>();

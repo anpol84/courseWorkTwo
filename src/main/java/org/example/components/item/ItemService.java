@@ -2,6 +2,7 @@ package org.example.components.item;
 
 import org.example.auth.User;
 import org.example.auth.UserService;
+import org.example.components.category.CategoryRepository;
 import org.example.components.empolyee.Employee;
 import org.example.components.kind.KindRepository;
 import org.example.components.shop.ShopRepository;
@@ -23,14 +24,17 @@ public class ItemService {
     private final UserService userService;
     private final ShopRepository shopRepository;
     private final KindRepository kindRepository;
+    private final CategoryRepository categoryRepository;
     @Autowired
     public ItemService(ItemRepository itemRepository, MyItemRepository myItemRepository,
-                       UserService userService, ShopRepository shopRepository, KindRepository kindRepository) {
+                       UserService userService, ShopRepository shopRepository, KindRepository kindRepository,
+                       CategoryRepository categoryRepository) {
         this.itemRepository = itemRepository;
         this.myItemRepository = myItemRepository;
         this.userService = userService;
         this.shopRepository = shopRepository;
         this.kindRepository = kindRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public ResponseEntity<String> findAll(){
@@ -42,12 +46,14 @@ public class ItemService {
         return ResponseEntity.ok(items2.toString());
     }
 
-    public ResponseEntity<String> save(Item item, HttpServletRequest request, Long shop_id, Long kind_id){
+    public ResponseEntity<String> save(Item item, HttpServletRequest request, Long shop_id, Long kind_id,
+                                       Long category_id){
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
         item.setShop(shopRepository.getById(shop_id));
         item.setKind(kindRepository.getById(kind_id));
+        item.setCategory(categoryRepository.getById(category_id));
         itemRepository.save(item);
         return ResponseEntity.ok("Saved");
     }

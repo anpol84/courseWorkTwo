@@ -110,9 +110,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
 
-            <column name="category" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
+
 
 
             <column name="purchase_price" type="FLOAT">
@@ -306,7 +304,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="order" type="VARCHAR(255)">
+            <column name="order_kind" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
 

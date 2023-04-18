@@ -39,12 +39,15 @@ public class KindDto {
         kindDto.setEatingWay(kind.getEatingWay());
         kindDto.setClimateZone(kind.getClimateZone());
         kindDto.setOrder(kind.getOrder());
+
         List<PetDto> pets = new ArrayList<>();
+
         for (Pet pet : kind.getPets()){
             PetDto petDto = PetDto.fromPet(pet);
             petDto.setKind("[]");
             pets.add(petDto);
         }
+        kindDto.setPets(pets);
         List<ItemDto> items = new ArrayList<>();
         for (Item item : kind.getItems()){
             ItemDto itemDto = ItemDto.fromItem(item);

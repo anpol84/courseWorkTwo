@@ -32,14 +32,28 @@ public class PetDto {
     public static PetDto fromPet(Pet pet){
         PetDto petDto = new PetDto();
         petDto.setId(pet.getId());
-        petDto.setKind(pet.getKind().getName());
+        if (pet.getKind() != null){
+            petDto.setKind(pet.getKind().getName());
+        }else{
+            petDto.setKind("[]");
+        }
+
         petDto.setAlias(pet.getAlias());
         petDto.setWeight(pet.getWeight());
         petDto.setGender(pet.getGender());
         petDto.setColor(pet.getColor());
         petDto.setPrice(pet.getPrice());
-        petDto.setShopAddress(pet.getShop().getAddress().toString());
-        petDto.setShopPhone(pet.getShop().getPhone());
+        if (pet.getShop() == null){
+            petDto.setShopAddress("[]");
+            petDto.setShopPhone("[]");
+        }else{
+            petDto.setShopPhone(pet.getShop().getPhone());
+            if (pet.getShop().getAddress() == null){
+                petDto.setShopAddress("[]");
+            }else{
+                petDto.setShopAddress(pet.getShop().getAddress().toString());
+            }
+        }
         return petDto;
     }
 

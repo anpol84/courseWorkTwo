@@ -26,12 +26,31 @@ public class ItemDto {
     public static ItemDto fromItem(Item item){
         ItemDto itemDto = new ItemDto();
         itemDto.setId(item.getId());
-        itemDto.setCategory(item.getCategory().getName());
-        itemDto.setKind(item.getKind().getName());
+        if (item.getCategory() == null){
+            itemDto.setCategory("[]");
+        }else{
+            itemDto.setCategory(item.getCategory().getName());
+        }
+        if (item.getKind() == null){
+            itemDto.setKind("[]");
+        }else{
+            itemDto.setKind(item.getKind().getName());
+        }
         itemDto.setPurchasePrice(item.getPurchasePrice());
         itemDto.setSellingPrice(item.getSellingPrice());
-        itemDto.setShopAddress(item.getShop().getAddress().toString());
-        itemDto.setShopPhone(item.getShop().getPhone());
+        if (item.getShop() == null){
+            itemDto.setShopAddress("[]");
+            itemDto.setShopPhone("[]");
+        }else{
+            itemDto.setShopPhone(item.getShop().getPhone());
+            if (item.getShop().getAddress() == null){
+                itemDto.setShopAddress("[]");
+            }else{
+                itemDto.setShopAddress(item.getShop().getAddress().toString());
+            }
+        }
+
+
         return itemDto;
     }
 }
