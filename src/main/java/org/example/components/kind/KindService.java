@@ -24,31 +24,31 @@ public class KindService {
         this.userService = userService;
     }
 
-    public ResponseEntity<String> findAll(){
+    public ResponseEntity<?> findAll(){
         Iterable<Kind> kinds = kindRepository.findAll();
         List<KindDto> kinds2 = new ArrayList<>();
         for (Kind kind : kinds){
             kinds2.add(KindDto.fromKind(kind));
         }
-        return new ResponseEntity<>(kinds2.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(kinds2, HttpStatus.OK);
     }
 
-    public ResponseEntity<String> findById(Long id) {
+    public ResponseEntity<?> findById(Long id) {
         Optional<Kind> kind = kindRepository.findById(id);
         if (!kind.isPresent()){
             return new ResponseEntity<>("No such entity", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(kind.get().toString(), HttpStatus.OK);
+        return new ResponseEntity<>(kind.get(), HttpStatus.OK);
     }
 
-    public ResponseEntity<String> filter(String name, String eatingWay, String climateZone,
+    public ResponseEntity<?> filter(String name, String eatingWay, String climateZone,
                                          String order){
         Iterable<Kind> kinds = myKindRepository.filter(name, eatingWay, climateZone, order);
         List<KindDto> kinds2 = new ArrayList<>();
         for (Kind kind : kinds){
             kinds2.add(KindDto.fromKind(kind));
         }
-        return new ResponseEntity<>(kinds2.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(kinds2, HttpStatus.OK);
     }
 
     public ResponseEntity<String> save(Kind kind, HttpServletRequest request){
@@ -63,8 +63,26 @@ public class KindService {
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
+        if (kindRepository.getById(id) == null){
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        }
         kindRepository.deleteById(id);
         return new ResponseEntity<>("Deleted", HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> update(Kind kind, Long id, HttpServletRequest request){
+        if (!userService.checkAdmin(request)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
+        Kind kind1 = kindRepository.getById(id);
+        if (kind1 == null){
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        }
+        kind.setItems(kind1.getItems());
+        kind.setPets(kind1.getPets());
+        kind.setId(id);
+        kindRepository.save(kind);
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
     }
 
 }

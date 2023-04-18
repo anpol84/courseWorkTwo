@@ -36,7 +36,7 @@ public class ShopDto {
         if (shop.getAddress() != null) {
             shopDto.setAddress(shop.getAddress().toString());
         }else{
-            shopDto.setAddress("[]");
+            shopDto.setAddress(null);
         }
         shopDto.setPhone(shop.getPhone());
         shopDto.setHead(shop.getHead());
@@ -45,20 +45,20 @@ public class ShopDto {
         List<ItemDto> items = new ArrayList<>();
         for (Employee employee : shop.getEmployees()){
             EmployeeDTO employeeDTO = EmployeeDTO.fromEmployee(employee);
-            employeeDTO.setShopAddress("[]");
-            employeeDTO.setShopPhone("[]");
+            employeeDTO.setShopAddress(null);
+            employeeDTO.setShopPhone(null);
             employees.add(employeeDTO);
         }
         for (Pet pet : shop.getPets()){
             PetDto petDto = PetDto.fromPet(pet);
-            petDto.setShopPhone("[]");
-            petDto.setShopAddress("[]");
+            petDto.setShopPhone(null);
+            petDto.setShopAddress(null);
             pets.add(petDto);
         }
         for (Item item : shop.getItems()){
             ItemDto itemDto = ItemDto.fromItem(item);
-            itemDto.setShopPhone("[]");
-            itemDto.setShopAddress("[]");
+            itemDto.setShopPhone(null);
+            itemDto.setShopAddress(null);
             items.add(itemDto);
         }
         shopDto.setEmployees(employees);

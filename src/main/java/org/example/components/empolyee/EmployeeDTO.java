@@ -42,18 +42,18 @@ public class EmployeeDTO {
         if (employee.getAddress() != null){
             employeeDTO.setAddress(employee.getAddress().toString());
         }else{
-            employeeDTO.setAddress("[]");
+            employeeDTO.setAddress(null);
         }
         if (employee.getShop() == null){
-            employeeDTO.setShopAddress("[]");
-            employeeDTO.setShopPhone("[]");
+            employeeDTO.setShopAddress(null);
+            employeeDTO.setShopPhone(null);
 
             return employeeDTO;
         }
         if (employee.getShop().getAddress() != null){
             employeeDTO.setShopAddress(employee.getShop().getAddress().toString());
         }else{
-            employeeDTO.setShopAddress("[]");
+            employeeDTO.setShopAddress(null);
         }
 
         employeeDTO.setShopPhone(employee.getShop().getPhone());

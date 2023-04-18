@@ -37,13 +37,13 @@ public class ItemService {
         this.categoryRepository = categoryRepository;
     }
 
-    public ResponseEntity<String> findAll(){
+    public ResponseEntity<?> findAll(){
         Iterable<Item> items = itemRepository.findAll();
         List<ItemDto> items2 = new ArrayList<>();
         for (Item item : items){
             items2.add(ItemDto.fromItem(item));
         }
-        return ResponseEntity.ok(items2.toString());
+        return ResponseEntity.ok(items2);
     }
 
     public ResponseEntity<String> save(Item item, HttpServletRequest request, Long shop_id, Long kind_id,
@@ -51,8 +51,17 @@ public class ItemService {
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
+        if (shopRepository.getById(shop_id) == null){
+            return new ResponseEntity<>("Shop not found", HttpStatus.NOT_FOUND);
+        }
         item.setShop(shopRepository.getById(shop_id));
+        if (kindRepository.getById(kind_id) == null){
+            return new ResponseEntity<>("Kind not found", HttpStatus.NOT_FOUND);
+        }
         item.setKind(kindRepository.getById(kind_id));
+        if (categoryRepository.getById(category_id) == null){
+            return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
+        }
         item.setCategory(categoryRepository.getById(category_id));
         itemRepository.save(item);
         return ResponseEntity.ok("Saved");
@@ -62,25 +71,57 @@ public class ItemService {
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
+        if (itemRepository.getById(id) == null){
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        }
         itemRepository.deleteById(id);
         return ResponseEntity.ok("Deleted");
     }
 
-    public ResponseEntity<String> findById(Long id){
+    public ResponseEntity<?> findById(Long id){
         Optional<Item> item = itemRepository.findById(id);
         if (!item.isPresent()){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Entyity not found");
         }else{
-            return ResponseEntity.ok((ItemDto.fromItem(item.get())).toString());
+            return ResponseEntity.ok((ItemDto.fromItem(item.get())));
         }
     }
 
-    public ResponseEntity<String> filter(String category, Double purchasePrice, Double sellingPrice){
+    public ResponseEntity<?> filter(String category, Double purchasePrice, Double sellingPrice){
         Iterable<Item> items = myItemRepository.filter(category, purchasePrice, sellingPrice);
         List<ItemDto> items2 = new ArrayList<>();
         for (Item item : items){
             items2.add(ItemDto.fromItem(item));
         }
-        return ResponseEntity.ok(items2.toString());
+        return ResponseEntity.ok(items2);
+    }
+
+    public ResponseEntity<String> update(Item item, Long id, Long shop_id, Long category_id, Long kind_id,
+                                         HttpServletRequest request){
+        if (!userService.checkAdmin(request)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
+        Item item1 = itemRepository.getById(id);
+        if (item1 == null){
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        }
+        if (shop_id == null){
+            item.setShop(item1.getShop());
+        }else{
+            item.setShop(shopRepository.getById(shop_id));
+        }
+        if (category_id == null){
+            item.setCategory(item1.getCategory());
+        }else{
+            item.setCategory(categoryRepository.getById(category_id));
+        }
+        if (kind_id == null){
+            item.setKind(item1.getKind());
+        }else{
+            item.setKind(kindRepository.getById(kind_id));
+        }
+        item.setId(id);
+        itemRepository.save(item);
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
     }
 }

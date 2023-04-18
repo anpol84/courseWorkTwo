@@ -2,8 +2,6 @@ package org.example.components.shop;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import org.example.components.empolyee.Employee;
-import org.example.components.empolyee.EmployeeDTO;
 import org.example.components.item.Item;
 import org.example.components.item.ItemDto;
 import org.example.components.pet.Pet;
@@ -36,7 +34,7 @@ public class ShopUsersDto {
         if (shop.getAddress() != null) {
             shopDto.setAddress(shop.getAddress().toString());
         }else{
-            shopDto.setAddress("[]");
+            shopDto.setAddress(null);
         }
         shopDto.setPhone(shop.getPhone());
         shopDto.setHead(shop.getHead());

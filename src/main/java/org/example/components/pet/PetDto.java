@@ -35,7 +35,7 @@ public class PetDto {
         if (pet.getKind() != null){
             petDto.setKind(pet.getKind().getName());
         }else{
-            petDto.setKind("[]");
+            petDto.setKind(null);
         }
 
         petDto.setAlias(pet.getAlias());
@@ -44,12 +44,12 @@ public class PetDto {
         petDto.setColor(pet.getColor());
         petDto.setPrice(pet.getPrice());
         if (pet.getShop() == null){
-            petDto.setShopAddress("[]");
-            petDto.setShopPhone("[]");
+            petDto.setShopAddress(null);
+            petDto.setShopPhone(null);
         }else{
             petDto.setShopPhone(pet.getShop().getPhone());
             if (pet.getShop().getAddress() == null){
-                petDto.setShopAddress("[]");
+                petDto.setShopAddress(null);
             }else{
                 petDto.setShopAddress(pet.getShop().getAddress().toString());
             }

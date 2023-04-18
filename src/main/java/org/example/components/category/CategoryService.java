@@ -24,30 +24,30 @@ public class CategoryService {
         this.userService = userService;
     }
 
-    public ResponseEntity<String> findAll(){
+    public ResponseEntity<?> findAll(){
         Iterable<Category> categories = categoryRepository.findAll();
         List<CategoryDto> categories2 = new ArrayList<>();
         for (Category category : categories){
             categories2.add(CategoryDto.fromCategory(category));
         }
-        return new ResponseEntity<>(categories2.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(categories2, HttpStatus.OK);
     }
 
-    public ResponseEntity<String> findById(Long id){
+    public ResponseEntity<?> findById(Long id){
         Optional<Category> category = categoryRepository.findById(id);
         if (!category.isPresent()){
             return new ResponseEntity<>("No such entity", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(category.get().toString(), HttpStatus.OK);
+        return new ResponseEntity<>(category.get(), HttpStatus.OK);
     }
 
-    public ResponseEntity<String> filter(String name, String purpose, String averageSize){
+    public ResponseEntity<?> filter(String name, String purpose, String averageSize){
         Iterable<Category> categories = myCategoryRepository.filter(name, purpose, averageSize);
         List<CategoryDto> categories2 = new ArrayList<>();
         for (Category category : categories){
             categories2.add(CategoryDto.fromCategory(category));
         }
-        return new ResponseEntity<>(categories2.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(categories2, HttpStatus.OK);
     }
 
     public ResponseEntity<String> save(Category category, HttpServletRequest request){
@@ -62,7 +62,24 @@ public class CategoryService {
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
+        if (categoryRepository.getById(id) == null){
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        }
         categoryRepository.deleteById(id);
         return new ResponseEntity<>("Deleted", HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> update(Category category, Long id, HttpServletRequest request){
+        if (!userService.checkAdmin(request)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
+        Category category1 = categoryRepository.getById(id);
+        if (category1 == null){
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        }
+        category.setId(id);
+        category.setItems(category1.getItems());
+        categoryRepository.save(category);
+        return new ResponseEntity<>("Saved", HttpStatus.OK);
     }
 }

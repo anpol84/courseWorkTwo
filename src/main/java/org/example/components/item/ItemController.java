@@ -18,7 +18,7 @@ public class ItemController {
         this.itemService = itemService;
     }
     @GetMapping()
-    public ResponseEntity<String> filter(@RequestParam(name = "category", required = false) String category,
+    public ResponseEntity<?> filter(@RequestParam(name = "category", required = false) String category,
                                          @RequestParam(name = "purchasePrice", required = false) Double purchasePrice,
                                          @RequestParam(name = "sellingPrice", required = false) Double sellingPrice){
         if (category != null  || purchasePrice != null || sellingPrice != null) {
@@ -28,7 +28,7 @@ public class ItemController {
         }
     }
     @GetMapping("/{id}")
-    public ResponseEntity<String> findById(@PathVariable Long id){
+    public ResponseEntity<?> findById(@PathVariable Long id){
         return itemService.findById(id);
     }
 
@@ -45,6 +45,15 @@ public class ItemController {
     @DeleteMapping
     public ResponseEntity<String> deleteById(@RequestParam Long id, @NonNull HttpServletRequest request){
         return itemService.deleteById(id, request);
+    }
+
+    @PutMapping
+    public ResponseEntity<String> update(@RequestBody Item item, @RequestParam Long id,
+                                         @RequestParam(required = false) Long shop_id,
+                                         @RequestParam(required = false) Long category_id,
+                                         @RequestParam(required = false) Long kind_id,
+                                         @NonNull HttpServletRequest request){
+        return itemService.update(item, id, shop_id, category_id, kind_id, request);
     }
 
 

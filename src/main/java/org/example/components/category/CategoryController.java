@@ -17,7 +17,7 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<String> findAll(@RequestParam(name = "name", required = false) String name,
+    public ResponseEntity<?> findAll(@RequestParam(name = "name", required = false) String name,
                                           @RequestParam(name = "purpose", required = false) String purpose,
                                           @RequestParam(name = "averageSize", required = false) String averageSize){
         if (name != null || purpose != null || averageSize != null){
@@ -27,7 +27,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> findById(@PathVariable Long id){
+    public ResponseEntity<?> findById(@PathVariable Long id){
         return categoryService.findById(id);
     }
 
@@ -39,5 +39,11 @@ public class CategoryController {
     @DeleteMapping
     public ResponseEntity<String> deleteById(@RequestParam Long id, @NonNull HttpServletRequest request){
         return categoryService.deleteById(id, request);
+    }
+
+    @PutMapping
+    public ResponseEntity<String> update(@RequestBody Category category, @RequestParam Long id,
+                                         @NonNull HttpServletRequest request){
+        return categoryService.update(category, id, request);
     }
 }

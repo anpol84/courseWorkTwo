@@ -34,7 +34,7 @@ public class AddressService {
         this.shopRepository = shopRepository;
     }
 
-    public ResponseEntity<String> findAll(HttpServletRequest request){
+    public ResponseEntity<?> findAll(HttpServletRequest request){
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
@@ -43,19 +43,21 @@ public class AddressService {
         for (Address address : addresses){
             addresses2.add(AddressDto.fromAddress(address));
         }
-        return new ResponseEntity<>(addresses2.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(addresses2, HttpStatus.OK);
     }
 
-    public ResponseEntity<String> findById(Long id, HttpServletRequest request){
+    public ResponseEntity<?> findById(Long id, HttpServletRequest request){
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
         Optional<Address> address = addressRepository.findById(id);
-        return address.map(value -> new ResponseEntity<>(AddressDto.fromAddress(value).toString(), HttpStatus.OK)).
-                orElseGet(() -> ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied"));
+        if (!address.isPresent()){
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(address.get(), HttpStatus.OK);
     }
 
-    public ResponseEntity<String> filter(String region, String city, String street,
+    public ResponseEntity<?> filter(String region, String city, String street,
                                          Integer house, Integer flat, HttpServletRequest request){
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
@@ -65,7 +67,7 @@ public class AddressService {
         for (Address address : addresses){
             addresses2.add(AddressDto.fromAddress(address));
         }
-        return new ResponseEntity<>(addresses2.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(addresses2, HttpStatus.OK);
     }
 
     public ResponseEntity<String> save(Address address, boolean flag, Long id, HttpServletRequest request){
@@ -73,8 +75,14 @@ public class AddressService {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
         if (flag){
+            if (employeeRepository.getById(id) == null){
+                return new ResponseEntity<>("Employee not found", HttpStatus.NOT_FOUND);
+            }
             address.setEmployee(employeeRepository.getById(id));
         }else{
+            if (shopRepository.getById(id) == null){
+                return new ResponseEntity<>("Shop not found", HttpStatus.NOT_FOUND);
+            }
             address.setShop(shopRepository.getById(id));
         }
         addressRepository.save(address);
@@ -85,7 +93,34 @@ public class AddressService {
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
+        if (addressRepository.getById(id) == null){
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
+        }
         addressRepository.deleteById(id);
         return new ResponseEntity<>("Deleted", HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> update(Address address, Long id, Long shop_id, Long employee_id,
+                                         HttpServletRequest request){
+        if (!userService.checkAdmin(request)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
+        Optional<Address> address1 = addressRepository.findById(id);
+        if (!address1.isPresent()){
+            return new ResponseEntity<>("Entity not found", HttpStatus.OK);
+        }
+        if (shop_id != null) {
+            address.setShop(shopRepository.getById(shop_id));
+        }else{
+            address.setShop(address1.get().getShop());
+        }
+        if (employee_id != null){
+            address.setEmployee(employeeRepository.getById(employee_id));
+        }else{
+            address.setEmployee(address1.get().getEmployee());
+        }
+        address.setId(id);
+        addressRepository.save(address);
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
     }
 }

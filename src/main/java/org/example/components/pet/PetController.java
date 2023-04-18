@@ -17,7 +17,7 @@ public class PetController {
     }
 
     @GetMapping("")
-    public ResponseEntity<String> filter(@RequestParam(name = "weight", required = false) Double weight,
+    public ResponseEntity<?> filter(@RequestParam(name = "weight", required = false) Double weight,
                                          @RequestParam(name = "alias", required = false) String alias,
                                          @RequestParam(name = "gender", required = false) String gender,
                                          @RequestParam(name = "color", required = false) String color,
@@ -28,7 +28,7 @@ public class PetController {
         return petService.findAll();
     }
     @GetMapping("/{id}")
-    public ResponseEntity<String> findById(@PathVariable Long id){
+    public ResponseEntity<?> findById(@PathVariable Long id){
         return petService.findById(id);
     }
 
@@ -45,5 +45,12 @@ public class PetController {
         return petService.deleteById(id, request);
     }
 
+    @PutMapping
+    public ResponseEntity<String> update(@RequestBody Pet pet, @RequestParam Long id,
+                                         @RequestParam(required = false) Long shop_id,
+                                         @RequestParam(required = false) Long kind_id,
+                                         @NonNull HttpServletRequest request){
+        return petService.update(pet, id, shop_id, kind_id, request);
+    }
 
 }

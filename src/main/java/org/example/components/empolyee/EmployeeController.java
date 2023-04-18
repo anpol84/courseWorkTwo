@@ -16,7 +16,7 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping("")
-    public ResponseEntity<String> findAll(@RequestParam(value = "name", required = false) String name,
+    public ResponseEntity<?> findAll(@RequestParam(value = "name", required = false) String name,
                                           @RequestParam(value = "email", required = false) String email,
                                           @RequestParam(value = "phone", required = false) String phone,
                                           @RequestParam(value = "salary", required = false) Double salary,
@@ -29,7 +29,7 @@ public class EmployeeController {
         }
     }
     @GetMapping("/{id}")
-    public ResponseEntity<String> findById(@PathVariable Long id, @NonNull HttpServletRequest request){
+    public ResponseEntity<?> findById(@PathVariable Long id, @NonNull HttpServletRequest request){
         return employeeService.findById(id, request);
     }
     @PostMapping
@@ -40,6 +40,14 @@ public class EmployeeController {
     @DeleteMapping
     public ResponseEntity<String> deleteById(@RequestParam Long id, @NonNull HttpServletRequest request){
         return employeeService.deleteById(id, request);
+    }
+
+    @PutMapping
+    public ResponseEntity<String> update(@RequestBody Employee employee, @RequestParam Long id,
+                                         @RequestParam(required = false) Long address_id,
+                                         @RequestParam(required = false) Long shop_id,
+                                         @NonNull HttpServletRequest request){
+        return employeeService.update(employee, id, address_id, shop_id, request);
     }
 
 }

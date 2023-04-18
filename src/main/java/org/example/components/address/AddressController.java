@@ -20,7 +20,7 @@ public class AddressController {
     }
 
     @GetMapping
-    public ResponseEntity<String> findAll(@RequestParam(name = "region", required = false) String region,
+    public ResponseEntity<?> findAll(@RequestParam(name = "region", required = false) String region,
                                           @RequestParam(name="city", required = false) String city,
                                           @RequestParam(name="street", required = false) String street,
                                           @RequestParam(name="house", required = false) Integer house,
@@ -33,7 +33,7 @@ public class AddressController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> findById(@PathVariable Long id, @NonNull HttpServletRequest request){
+    public ResponseEntity<?> findById(@PathVariable Long id, @NonNull HttpServletRequest request){
         return addressService.findById(id, request);
     }
     @PostMapping
@@ -52,5 +52,16 @@ public class AddressController {
     @DeleteMapping
     public ResponseEntity<String> deleteById(@RequestParam Long id, @NonNull HttpServletRequest request){
         return addressService.deleteById(id, request);
+    }
+
+    @PutMapping
+    public ResponseEntity<String> update(@RequestBody Address address, @RequestParam Long id,
+                                         @RequestParam(required = false) Long shop_id,
+                                         @RequestParam(required = false) Long employee_id,
+                                         @NonNull HttpServletRequest request){
+        if (shop_id != null && employee_id != null){
+            return new ResponseEntity<>("Access Denied", HttpStatus.FORBIDDEN);
+        }
+        return update(address, id, shop_id, employee_id, request);
     }
 }

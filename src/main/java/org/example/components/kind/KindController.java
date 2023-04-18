@@ -16,7 +16,7 @@ public class KindController {
         this.kindService = kindService;
     }
     @GetMapping
-    public ResponseEntity<String> findAll(@RequestParam(name = "name", required = false) String name,
+    public ResponseEntity<?> findAll(@RequestParam(name = "name", required = false) String name,
                                           @RequestParam(name = "eatingWay", required = false) String eatingWay,
                                           @RequestParam(name = "climateZone", required = false) String climateZone,
                                           @RequestParam(name = "order", required = false) String order){
@@ -26,7 +26,7 @@ public class KindController {
         return kindService.findAll();
     }
     @GetMapping("/{id}")
-    public ResponseEntity<String> findById(@PathVariable Long id){
+    public ResponseEntity<?> findById(@PathVariable Long id){
         return kindService.findById(id);
     }
 
@@ -38,5 +38,11 @@ public class KindController {
     @DeleteMapping
     public ResponseEntity<String> deleteById(@RequestParam Long id, @NonNull HttpServletRequest request){
         return kindService.deleteById(id, request);
+    }
+
+    @PutMapping
+    public ResponseEntity<String> update(@RequestBody Kind kind, @RequestParam Long id,
+                                         @NonNull HttpServletRequest request){
+        return kindService.update(kind, id, request);
     }
 }

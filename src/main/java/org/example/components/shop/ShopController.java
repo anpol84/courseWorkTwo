@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/shops")
@@ -17,16 +18,16 @@ public class ShopController {
     }
 
     @GetMapping
-    public ResponseEntity<String> getShops(@RequestParam(name = "head", required = false) String head,
-                                           @RequestParam(name = "phone", required = false) String phone,
-                                           @NonNull HttpServletRequest request){
+    public ResponseEntity<?> getShops(@RequestParam(name = "head", required = false) String head,
+                                                      @RequestParam(name = "phone", required = false) String phone,
+                                                      @NonNull HttpServletRequest request){
         if (phone != null || head != null){
             return shopService.filter(head, phone, request);
         }
         return shopService.findAll(request);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<String> findById(@PathVariable Long id, @NonNull HttpServletRequest request){
+    public ResponseEntity<?> findById(@PathVariable Long id, @NonNull HttpServletRequest request){
         return shopService.findById(id, request);
     }
 
@@ -38,5 +39,12 @@ public class ShopController {
     @DeleteMapping
     public ResponseEntity<String> deleteById(@RequestParam Long id, @NonNull HttpServletRequest request){
         return shopService.deleteById(id, request);
+    }
+
+    @PutMapping
+    public ResponseEntity<String> update(@RequestBody Shop shop, @RequestParam Long id,
+                                         @RequestParam(required = false) Long address_id,
+                                         @NonNull HttpServletRequest request){
+        return shopService.update(shop, id, address_id, request);
     }
 }

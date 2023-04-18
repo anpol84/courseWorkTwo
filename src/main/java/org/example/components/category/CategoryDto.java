@@ -36,8 +36,8 @@ public class CategoryDto {
         List<ItemDto> items = new ArrayList<>();
         for (Item item : category.getItems()){
             ItemDto itemDto = ItemDto.fromItem(item);
-            itemDto.setKind("[]");
-            itemDto.setCategory("[]");
+            itemDto.setKind(null);
+            itemDto.setCategory(null);
             items.add(itemDto);
         }
         categoryDto.setItems(items);

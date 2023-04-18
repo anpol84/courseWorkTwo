@@ -27,30 +27,28 @@ public class ItemDto {
         ItemDto itemDto = new ItemDto();
         itemDto.setId(item.getId());
         if (item.getCategory() == null){
-            itemDto.setCategory("[]");
+            itemDto.setCategory(null);
         }else{
             itemDto.setCategory(item.getCategory().getName());
         }
         if (item.getKind() == null){
-            itemDto.setKind("[]");
+            itemDto.setKind(null);
         }else{
             itemDto.setKind(item.getKind().getName());
         }
         itemDto.setPurchasePrice(item.getPurchasePrice());
         itemDto.setSellingPrice(item.getSellingPrice());
         if (item.getShop() == null){
-            itemDto.setShopAddress("[]");
-            itemDto.setShopPhone("[]");
+            itemDto.setShopAddress(null);
+            itemDto.setShopPhone(null);
         }else{
             itemDto.setShopPhone(item.getShop().getPhone());
             if (item.getShop().getAddress() == null){
-                itemDto.setShopAddress("[]");
+                itemDto.setShopAddress(null);
             }else{
                 itemDto.setShopAddress(item.getShop().getAddress().toString());
             }
         }
-
-
         return itemDto;
     }
 }
