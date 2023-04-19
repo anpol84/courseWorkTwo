@@ -14,10 +14,10 @@ public class EmployeeDTO {
     private String email;
     private double salary;
     private String position;
-    private String shopAddress;
+    private AddressDto shopAddress;
 
     private String shopPhone;
-    private String address;
+    private AddressDto address;
 
 
     public Employee toEmployee(){
@@ -40,7 +40,7 @@ public class EmployeeDTO {
         employeeDTO.setEmail(employee.getEmail());
         employeeDTO.setPosition(employee.getPosition());
         if (employee.getAddress() != null){
-            employeeDTO.setAddress(employee.getAddress().toString());
+            employeeDTO.setAddress(AddressDto.fromAddress(employee.getAddress()));
         }else{
             employeeDTO.setAddress(null);
         }
@@ -51,7 +51,7 @@ public class EmployeeDTO {
             return employeeDTO;
         }
         if (employee.getShop().getAddress() != null){
-            employeeDTO.setShopAddress(employee.getShop().getAddress().toString());
+            employeeDTO.setShopAddress(AddressDto.fromAddress(employee.getShop().getAddress()));
         }else{
             employeeDTO.setShopAddress(null);
         }

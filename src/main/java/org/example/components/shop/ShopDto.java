@@ -2,6 +2,8 @@ package org.example.components.shop;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.example.components.address.Address;
+import org.example.components.address.AddressDto;
 import org.example.components.empolyee.Employee;
 import org.example.components.empolyee.EmployeeDTO;
 import org.example.components.item.Item;
@@ -16,7 +18,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShopDto {
     private Long id;
-    private String address;
+    private AddressDto address;
     private String phone;
     private String head;
     private List<EmployeeDTO> employees = new ArrayList<>();
@@ -34,7 +36,7 @@ public class ShopDto {
         ShopDto shopDto = new ShopDto();
         shopDto.setId(shop.getId());
         if (shop.getAddress() != null) {
-            shopDto.setAddress(shop.getAddress().toString());
+            shopDto.setAddress(AddressDto.fromAddress(shop.getAddress()));
         }else{
             shopDto.setAddress(null);
         }
@@ -46,18 +48,18 @@ public class ShopDto {
         for (Employee employee : shop.getEmployees()){
             EmployeeDTO employeeDTO = EmployeeDTO.fromEmployee(employee);
             employeeDTO.setShopAddress(null);
-            employeeDTO.setShopPhone(null);
+            employeeDTO.setShopPhone("");
             employees.add(employeeDTO);
         }
         for (Pet pet : shop.getPets()){
             PetDto petDto = PetDto.fromPet(pet);
-            petDto.setShopPhone(null);
+            petDto.setShopPhone("");
             petDto.setShopAddress(null);
             pets.add(petDto);
         }
         for (Item item : shop.getItems()){
             ItemDto itemDto = ItemDto.fromItem(item);
-            itemDto.setShopPhone(null);
+            itemDto.setShopPhone("");
             itemDto.setShopAddress(null);
             items.add(itemDto);
         }

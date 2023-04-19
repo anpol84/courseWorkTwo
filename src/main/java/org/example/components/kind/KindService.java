@@ -63,7 +63,7 @@ public class KindService {
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
-        if (kindRepository.getById(id) == null){
+        if (!(kindRepository.findById(id)).isPresent()){
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         }
         kindRepository.deleteById(id);
@@ -74,12 +74,12 @@ public class KindService {
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
-        Kind kind1 = kindRepository.getById(id);
-        if (kind1 == null){
+        Optional<Kind> kind1 = kindRepository.findById(id);
+        if (!kind1.isPresent()){
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         }
-        kind.setItems(kind1.getItems());
-        kind.setPets(kind1.getPets());
+        kind.setItems(kind1.get().getItems());
+        kind.setPets(kind1.get().getPets());
         kind.setId(id);
         kindRepository.save(kind);
         return new ResponseEntity<>("Updated", HttpStatus.OK);

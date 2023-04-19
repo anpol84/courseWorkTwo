@@ -62,7 +62,7 @@ public class CategoryService {
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
-        if (categoryRepository.getById(id) == null){
+        if (!(categoryRepository.findById(id)).isPresent()){
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         }
         categoryRepository.deleteById(id);
@@ -73,12 +73,12 @@ public class CategoryService {
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
-        Category category1 = categoryRepository.getById(id);
-        if (category1 == null){
+        Optional<Category> category1 = categoryRepository.findById(id);
+        if (!category1.isPresent()){
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         }
         category.setId(id);
-        category.setItems(category1.getItems());
+        category.setItems(category1.get().getItems());
         categoryRepository.save(category);
         return new ResponseEntity<>("Saved", HttpStatus.OK);
     }

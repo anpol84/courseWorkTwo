@@ -44,10 +44,9 @@ public class EmployeeController {
 
     @PutMapping
     public ResponseEntity<String> update(@RequestBody Employee employee, @RequestParam Long id,
-                                         @RequestParam(required = false) Long address_id,
                                          @RequestParam(required = false) Long shop_id,
                                          @NonNull HttpServletRequest request){
-        return employeeService.update(employee, id, address_id, shop_id, request);
+        return employeeService.update(employee, id, shop_id, request);
     }
 
 }

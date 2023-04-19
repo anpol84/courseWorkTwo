@@ -92,7 +92,7 @@ public class ShopService {
         return ResponseEntity.ok(shops2);
     }
 
-    public ResponseEntity<String> update(Shop shop, Long id, Long address_id, HttpServletRequest request){
+    public ResponseEntity<String> update(Shop shop, Long id, HttpServletRequest request){
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
@@ -101,9 +101,6 @@ public class ShopService {
             return new ResponseEntity<>("No such entity", HttpStatus.NOT_FOUND);
         }
         shop.setPets(shop1.get().getPets());
-        if (address_id != null){
-            shop.setAddress(addressRepository.findById(address_id).get());
-        }
         shop.setAddress(shop1.get().getAddress());
         shop.setEmployees(shop1.get().getEmployees());
         shop.setItems(shop1.get().getItems());

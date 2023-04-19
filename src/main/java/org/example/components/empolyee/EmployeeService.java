@@ -60,7 +60,7 @@ public class EmployeeService {
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
-        if (employeeRepository.getById(id) == null){
+        if (!(employeeRepository.findById(id)).isPresent()){
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         }
         employeeRepository.deleteById(id);
@@ -92,7 +92,7 @@ public class EmployeeService {
         }
     }
 
-    public ResponseEntity<String> update(Employee employee, Long id, Long address_id, Long shop_id,
+    public ResponseEntity<String> update(Employee employee, Long id, Long shop_id,
                                          HttpServletRequest request){
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
@@ -101,13 +101,11 @@ public class EmployeeService {
         if (!employee1.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Entity not found");
         }
-        if (address_id != null){
-            employee.setAddress(addressRepository.getById(id));
-        }else{
-            employee.setAddress(employee1.get().getAddress());
-        }
         if (shop_id != null){
-            employee.setShop(shopRepository.getById(id));
+            if (!(shopRepository.findById(shop_id)).isPresent()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Shop not found");
+            }
+            employee.setShop(shopRepository.getById(shop_id));
         }else{
             employee.setShop(employee1.get().getShop());
         }

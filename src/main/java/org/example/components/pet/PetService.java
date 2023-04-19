@@ -50,7 +50,7 @@ public class PetService {
             return new ResponseEntity<>("Shop not found", HttpStatus.NOT_FOUND);
         }
         pet.setShop(shopRepository.getById(shop_id));
-        if (kindRepository.getById(kind_id) == null){
+        if (!(kindRepository.findById(kind_id)).isPresent()){
             return new ResponseEntity<>("Kind not found", HttpStatus.NOT_FOUND);
         }
         pet.setKind(kindRepository.getById(kind_id));
@@ -62,7 +62,7 @@ public class PetService {
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
-        if (petRepository.getById(id) == null){
+        if (!(petRepository.findById(id)).isPresent()){
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         }
         petRepository.deleteById(id);
@@ -92,19 +92,25 @@ public class PetService {
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
-        Pet pet1 = petRepository.getById(id);
-        if (pet1 == null){
+        Optional<Pet> pet1 = petRepository.findById(id);
+        if (!pet1.isPresent()){
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         }
         if (shop_id != null){
+            if (!shopRepository.findById(shop_id).isPresent()){
+                return new ResponseEntity<>("Shop not found", HttpStatus.NOT_FOUND);
+            }
             pet.setShop(shopRepository.getById(shop_id));
         }else{
-            pet.setShop(pet1.getShop());
+            pet.setShop(pet1.get().getShop());
         }
         if (kind_id != null){
+            if (!kindRepository.findById(kind_id).isPresent()){
+                return new ResponseEntity<>("Kind not found", HttpStatus.NOT_FOUND);
+            }
             pet.setKind(kindRepository.getById(kind_id));
         }else{
-            pet.setKind(pet1.getKind());
+            pet.setKind(pet1.get().getKind());
         }
         pet.setId(id);
         petRepository.save(pet);

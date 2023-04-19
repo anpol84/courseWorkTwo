@@ -55,11 +55,11 @@ public class ItemService {
             return new ResponseEntity<>("Shop not found", HttpStatus.NOT_FOUND);
         }
         item.setShop(shopRepository.getById(shop_id));
-        if (kindRepository.getById(kind_id) == null){
+        if (!(kindRepository.findById(kind_id)).isPresent()){
             return new ResponseEntity<>("Kind not found", HttpStatus.NOT_FOUND);
         }
         item.setKind(kindRepository.getById(kind_id));
-        if (categoryRepository.getById(category_id) == null){
+        if (!(categoryRepository.findById(category_id)).isPresent()){
             return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
         }
         item.setCategory(categoryRepository.getById(category_id));
@@ -71,7 +71,7 @@ public class ItemService {
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
-        if (itemRepository.getById(id) == null){
+        if (!(itemRepository.findById(id)).isPresent()){
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         }
         itemRepository.deleteById(id);
@@ -81,7 +81,7 @@ public class ItemService {
     public ResponseEntity<?> findById(Long id){
         Optional<Item> item = itemRepository.findById(id);
         if (!item.isPresent()){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Entyity not found");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Entity not found");
         }else{
             return ResponseEntity.ok((ItemDto.fromItem(item.get())));
         }
@@ -101,23 +101,32 @@ public class ItemService {
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
-        Item item1 = itemRepository.getById(id);
-        if (item1 == null){
+        Optional<Item> item1 = itemRepository.findById(id);
+        if (!item1.isPresent()){
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         }
         if (shop_id == null){
-            item.setShop(item1.getShop());
+            item.setShop(item1.get().getShop());
         }else{
+            if (!shopRepository.findById(shop_id).isPresent()){
+                return new ResponseEntity<>("Shop not found", HttpStatus.NOT_FOUND);
+            }
             item.setShop(shopRepository.getById(shop_id));
         }
         if (category_id == null){
-            item.setCategory(item1.getCategory());
+            item.setCategory(item1.get().getCategory());
         }else{
+            if (!categoryRepository.findById(category_id).isPresent()){
+                return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
+            }
             item.setCategory(categoryRepository.getById(category_id));
         }
         if (kind_id == null){
-            item.setKind(item1.getKind());
+            item.setKind(item1.get().getKind());
         }else{
+            if (!kindRepository.findById(kind_id).isPresent()){
+                return new ResponseEntity<>("Kind not found", HttpStatus.NOT_FOUND);
+            }
             item.setKind(kindRepository.getById(kind_id));
         }
         item.setId(id);

@@ -44,7 +44,7 @@ public class KindDto {
 
         for (Pet pet : kind.getPets()){
             PetDto petDto = PetDto.fromPet(pet);
-            petDto.setKind("[]");
+            petDto.setKind("");
             pets.add(petDto);
         }
         kindDto.setPets(pets);

@@ -54,7 +54,8 @@ public class AddressService {
         if (!address.isPresent()){
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(address.get(), HttpStatus.OK);
+
+        return new ResponseEntity<>(AddressDto.fromAddress(address.get()), HttpStatus.OK);
     }
 
     public ResponseEntity<?> filter(String region, String city, String street,
@@ -75,7 +76,7 @@ public class AddressService {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
         if (flag){
-            if (employeeRepository.getById(id) == null){
+            if (!(employeeRepository.findById(id)).isPresent()){
                 return new ResponseEntity<>("Employee not found", HttpStatus.NOT_FOUND);
             }
             address.setEmployee(employeeRepository.getById(id));
@@ -93,7 +94,7 @@ public class AddressService {
         if (!userService.checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
-        if (addressRepository.getById(id) == null){
+        if (!(addressRepository.findById(id)).isPresent()){
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         }
         addressRepository.deleteById(id);
@@ -106,15 +107,28 @@ public class AddressService {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
         Optional<Address> address1 = addressRepository.findById(id);
+
         if (!address1.isPresent()){
-            return new ResponseEntity<>("Entity not found", HttpStatus.OK);
+            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
         }
         if (shop_id != null) {
+            if (address1.get().getEmployee() != null){
+                return new ResponseEntity<>("Bad request", HttpStatus.FORBIDDEN);
+            }
+            if (shopRepository.getById(shop_id) == null){
+                return new ResponseEntity<>("Shop not found", HttpStatus.NOT_FOUND);
+            }
             address.setShop(shopRepository.getById(shop_id));
         }else{
             address.setShop(address1.get().getShop());
         }
         if (employee_id != null){
+            if (address1.get().getShop() != null){
+                return new ResponseEntity<>("Bad request", HttpStatus.FORBIDDEN);
+            }
+            if (!(employeeRepository.findById(employee_id)).isPresent()){
+                return new ResponseEntity<>("Employee not found", HttpStatus.NOT_FOUND);
+            }
             address.setEmployee(employeeRepository.getById(employee_id));
         }else{
             address.setEmployee(address1.get().getEmployee());

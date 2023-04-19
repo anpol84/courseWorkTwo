@@ -43,8 +43,7 @@ public class ShopController {
 
     @PutMapping
     public ResponseEntity<String> update(@RequestBody Shop shop, @RequestParam Long id,
-                                         @RequestParam(required = false) Long address_id,
                                          @NonNull HttpServletRequest request){
-        return shopService.update(shop, id, address_id, request);
+        return shopService.update(shop, id, request);
     }
 }

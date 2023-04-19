@@ -40,7 +40,7 @@ public class AddressController {
     public ResponseEntity<String> save(@RequestBody Address address, @NonNull HttpServletRequest request,
                                        @RequestParam(name="employee_id", required = false) Long employee_id,
                                        @RequestParam(name="shop_id", required = false) Long shop_id){
-        if (shop_id != null && employee_id != null){
+        if (shop_id != null && employee_id != null || shop_id == null && employee_id == null){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
         if (employee_id != null){
@@ -59,9 +59,9 @@ public class AddressController {
                                          @RequestParam(required = false) Long shop_id,
                                          @RequestParam(required = false) Long employee_id,
                                          @NonNull HttpServletRequest request){
-        if (shop_id != null && employee_id != null){
+        if (shop_id != null && employee_id != null ){
             return new ResponseEntity<>("Access Denied", HttpStatus.FORBIDDEN);
         }
-        return update(address, id, shop_id, employee_id, request);
+        return addressService.update(address, id, shop_id, employee_id, request);
     }
 }
