@@ -2,31 +2,34 @@ version: '3'
 
 services:
   mysql:
-      image: mysql:latest
-      environment:
-         MYSQL_ROOT_PASSWORD: password
-         MYSQL_DATABASE: maven-db
-      volumes:
-         - maven-data:/var/lib/mysql
-      networks:
-         - maven-network
-
-  docker_maven:
-      build: .
-      ports:
-         - '9090:9090'
-      environment:
-         SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/maven-db
-         SPRING_DATASOURCE_USERNAME: root
-         SPRING_DATASOURCE_PASSWORD: password
-         SERVER_PORT: 9090
-      depends_on:
-         - mysql
-      networks:
-         - maven-network
+    image: mysql:5.5
+    environment:
+      MYSQL_ROOT_PASSWORD: Buffon1326902
+      MYSQL_DATABASE: courseWork
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - item-network
+    
+  server:
+    build: .
+    ports:
+      - '9090:9090'
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/courseWork
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Buffon1326902
+      SERVER_PORT: 9090
+      SPRING_LIQUIBASE_ENABLED: true
+      SPRING_LIQUIBASE_CHANGELOG: classpath:liquibase/db.changelog-master.xml
+    depends_on:
+      - mysql
+    networks:
+      - item-network
 
 networks:
-   maven-network:
+  item-network:
 
 volumes:
-   maven-data:
+  mysql-data:

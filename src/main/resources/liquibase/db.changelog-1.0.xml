@@ -209,7 +209,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet id="1.0.10" author="username">
+    <changeSet id="1.0.10" author="anpol84">
         <addForeignKeyConstraint baseTableName="employees"
                                  baseColumnNames="shop_id"
                                  onDelete="CASCADE"
@@ -218,7 +218,7 @@
                                  referencedColumnNames="id"
                                  constraintName="fk_employees_shops"/>
     </changeSet>
-    <changeSet id="1.0.11" author="username">
+    <changeSet id="1.0.11" author="anpol84">
         <addForeignKeyConstraint baseTableName="items"
                                  baseColumnNames="shop_id"
                                  onDelete="CASCADE"
@@ -227,7 +227,7 @@
                                  referencedColumnNames="id"
                                  constraintName="fk_items_shops"/>
     </changeSet>
-    <changeSet id="1.0.12" author="username">
+    <changeSet id="1.0.12" author="anpol84">
         <addForeignKeyConstraint baseTableName="pets"
                                  baseColumnNames="shop_id"
                                  onDelete="CASCADE"
@@ -268,7 +268,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet id="1.0.14" author="username">
+    <changeSet id="1.0.14" author="anpol84">
         <addForeignKeyConstraint baseTableName="addresses"
                                  baseColumnNames="employee_id"
                                  onDelete="CASCADE"
@@ -277,7 +277,7 @@
                                  referencedColumnNames="id"
                                  constraintName="fk_addresses_employees"/>
     </changeSet>
-    <changeSet id="1.0.15" author="username">
+    <changeSet id="1.0.15" author="anpol84">
         <addForeignKeyConstraint baseTableName="addresses"
                                  baseColumnNames="shop_id"
                                  onDelete="CASCADE"
@@ -310,7 +310,7 @@
 
         </createTable>
     </changeSet>
-    <changeSet id="1.0.17" author="username">
+    <changeSet id="1.0.17" author="anpol84">
         <addForeignKeyConstraint baseTableName="pets"
                                  baseColumnNames="kind_id"
                                  onDelete="CASCADE"
@@ -319,7 +319,7 @@
                                  referencedColumnNames="id"
                                  constraintName="fk_pets_kinds"/>
     </changeSet>
-    <changeSet id="1.0.18" author="username">
+    <changeSet id="1.0.18" author="anpol84">
         <addForeignKeyConstraint baseTableName="items"
                                  baseColumnNames="kind_id"
                                  onDelete="CASCADE"
@@ -348,7 +348,7 @@
 
         </createTable>
     </changeSet>
-    <changeSet id="1.0.20" author="username">
+    <changeSet id="1.0.20" author="anpol84">
         <addForeignKeyConstraint baseTableName="items"
                                  baseColumnNames="category_id"
                                  onDelete="CASCADE"
@@ -356,5 +356,30 @@
                                  referencedTableName="categories"
                                  referencedColumnNames="id"
                                  constraintName="fk_items_categories"/>
+    </changeSet>
+    <changeSet id="1.0.21" author="anpol84">
+        <insert tableName="users">
+            <column name="id">1</column>
+            <column name="username">anpol</column>
+            <column name="email">someemail</column>
+            <column name="password">$2a$04$Q5Q2H8qO.ifQ.j1uOuozbOxTarMK0zhFhsT/hAyZtiLX5D/0GE6R.</column>
+            <column name="first_name">andrey</column>
+            <column name="last_name">Polyakov</column>
+            <column name="status">ACTIVE</column>
+        </insert>
+    </changeSet>
+    <changeSet id="1.0.22" author="anpol84">
+        <insert tableName="user_roles">
+            <column name="user_id">1</column>
+            <column name="role_id">1</column>
+
+        </insert>
+    </changeSet>
+    <changeSet id="1.0.23" author="anpol84">
+        <insert tableName="user_roles">
+            <column name="user_id">1</column>
+            <column name="role_id">2</column>
+
+        </insert>
     </changeSet>
 </databaseChangeLog>
