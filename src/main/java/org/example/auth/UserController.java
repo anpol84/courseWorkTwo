@@ -27,19 +27,19 @@ public class UserController {
     }
 
     @GetMapping(value = "{id}")
-    public ResponseEntity<String> getUserById(@PathVariable(name = "id") Long id,
+    public ResponseEntity<?> getUserById(@PathVariable(name = "id") Long id,
                                                @NonNull HttpServletRequest request){
 
         return userService.getUser(id, request);
     }
     @GetMapping()
-    public ResponseEntity<String> getAllUsers(@NonNull HttpServletRequest request){
+    public ResponseEntity<?> getAllUsers(@NonNull HttpServletRequest request){
         return userService.getAll(request);
     }
     @PostMapping
-    public ResponseEntity<String> registryAdmin(@RequestBody RegistrationUserDto registrationUserDto,
+    public ResponseEntity<?> registryAdmin(@RequestBody RegistrationUserDto registrationUserDto,
                                                 @NonNull HttpServletRequest request){
-        ResponseEntity<String> answer = userService.registryAdmin(registrationUserDto.toUser(), request);
+        ResponseEntity<?> answer = userService.registryAdmin(registrationUserDto.toUser(), request);
         if (answer.getStatusCode().equals(HttpStatus.FORBIDDEN))return answer;
         AuthenticationRequestDto requestDto = new AuthenticationRequestDto(registrationUserDto.getUsername(),
                 registrationUserDto.getPassword());

@@ -58,7 +58,7 @@ public class UserService {
         }
         return false;
     }
-    public ResponseEntity<String> getAll(@NonNull HttpServletRequest request) {
+    public ResponseEntity<?> getAll(@NonNull HttpServletRequest request) {
         if (!checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
@@ -68,7 +68,7 @@ public class UserService {
              result2.add(AdminUserDto.fromUser(user));
         }
         log.info("IN getAll - {} users found", result2.size());
-        return new ResponseEntity<>(result2.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(result2, HttpStatus.OK);
     }
 
     public User findByUsername(String username) {
@@ -97,7 +97,7 @@ public class UserService {
         log.info("IN delete - user with id: {} successfully deleted");
         return new ResponseEntity<>("Deleted", HttpStatus.OK);
     }
-    public ResponseEntity<String> getUser(Long id, HttpServletRequest request){
+    public ResponseEntity<?> getUser(Long id, HttpServletRequest request){
         User user = findById(id);
         if (user == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -107,11 +107,11 @@ public class UserService {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
             }else{
                 UserDto result = UserDto.fromUser(user);
-                return new ResponseEntity<>(result.toString(), HttpStatus.OK);
+                return new ResponseEntity<>(result, HttpStatus.OK);
             }
         }
         AdminUserDto result = AdminUserDto.fromUser(user);
-        return new ResponseEntity<>(result.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     private Long getUserId(HttpServletRequest request){
@@ -121,7 +121,7 @@ public class UserService {
         return user.getId();
     }
 
-    public ResponseEntity<String> registryAdmin(User user, HttpServletRequest request){
+    public ResponseEntity<?> registryAdmin(User user, HttpServletRequest request){
         if (!checkAdmin(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
         }
@@ -139,6 +139,6 @@ public class UserService {
 
         log.info("IN register - user: {} successfully registered", registeredUser);
 
-        return new ResponseEntity<>(registeredUser.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(registeredUser, HttpStatus.OK);
     }
 }
