@@ -3,12 +3,14 @@ package org.example.components.shop;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/api/v1/shops")
 public class ShopController {
     private final ShopService shopService;
@@ -18,27 +20,27 @@ public class ShopController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getShops(@RequestParam(name = "head", required = false) String head,
-                                                      @RequestParam(name = "phone", required = false) String phone,
-                                                      @NonNull HttpServletRequest request){
-        if (phone != null || head != null){
-            return shopService.filter(head, phone, request);
-        }
-        return shopService.findAll(request);
+    public String getShops(Model model){
+        List<Shop> shops = (List<Shop>) shopService.findAll();
+        model.addAttribute("shops", shops);
+        return "shop";
     }
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id, @NonNull HttpServletRequest request){
-        return shopService.findById(id, request);
+    public String findById(@PathVariable Long id, Model model){
+        Shop shop = shopService.findById(id);
+        model.addAttribute("shop", ShopDto.fromShop(shop));
+        return "shop_info";
     }
 
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody Shop shop , @NonNull HttpServletRequest request){
-       return shopService.save(shop, request);
-
+    public String save(@ModelAttribute Shop shop, Model model){
+       shopService.save(shop);
+       return getShops(model);
     }
     @DeleteMapping
-    public ResponseEntity<String> deleteById(@RequestParam Long id, @NonNull HttpServletRequest request){
-        return shopService.deleteById(id, request);
+    public String deleteById(@RequestParam Long id, Model model){
+        shopService.deleteById(id);
+        return getShops(model);
     }
 
     @PutMapping

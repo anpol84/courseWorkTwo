@@ -30,50 +30,36 @@ public class ShopService {
         this.addressRepository = addressRepository;
     }
 
-    public ResponseEntity<String> save(Shop shop, HttpServletRequest request){
-        if (!userService.checkAdmin(request)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
-        }
+    public void save(Shop shop){
+
         shopRepository.save(shop);
-        return new ResponseEntity<>("Saved", HttpStatus.OK);
     }
 
-    public ResponseEntity<?> findAll(HttpServletRequest request){
-        if (!userService.checkAdmin(request)) {
+    public List<?> findAll(){
+       /* if (!userService.checkAdmin(request)) {
             Iterable<Shop> shops = shopRepository.findAll();
             List<ShopUsersDto> shops2 = new ArrayList<>();
             for (Shop shop : shops){
                 shops2.add(ShopUsersDto.fromShop(shop));
             }
             return new ResponseEntity<>(shops2, HttpStatus.OK);
-        }
+        }*/
         Iterable<Shop> shops = shopRepository.findAll();
         List<ShopDto> shops2 = new ArrayList<>();
         for (Shop shop : shops){
             shops2.add(ShopDto.fromShop(shop));
         }
-        return new ResponseEntity<>(shops2, HttpStatus.OK);
+        return shops2;
     }
     @Transactional
-    public ResponseEntity<String> deleteById(Long id, HttpServletRequest request){
-        if (!userService.checkAdmin(request)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
-        }
-        if (!shopRepository.findById(id).isPresent()) return new ResponseEntity<>("No such entity", HttpStatus.NOT_FOUND);
+    public void deleteById(Long id){
+        System.out.println(id);
         shopRepository.deleteById(id);
-        return new ResponseEntity<>("Deleted", HttpStatus.OK);
     }
 
-    public ResponseEntity<?> findById(Long id, HttpServletRequest request){
+    public Shop findById(Long id){
         Optional<Shop> shop = shopRepository.findById(id);
-        if (!shop.isPresent()){
-            return new ResponseEntity<>("No such entity", HttpStatus.NOT_FOUND);
-        }else{
-            if (!userService.checkAdmin(request)) {
-                return ResponseEntity.ok(ShopUsersDto.fromShop(shop.get()));
-            }
-            return ResponseEntity.ok(ShopDto.fromShop(shop.get()));
-        }
+        return shop.get();
     }
 
     public ResponseEntity<?> filter(String head, String phone, HttpServletRequest request){

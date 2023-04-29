@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="card mb-3">
+    <div class="card-header">
+        <h2>Изменить магазин</h2>
+    </div>
+    <div class="card-body">
+        <form th:action="@{/api/v1/shops}" th:method="put">
+            <div class="form-group">
+                <label for="phone">Телефон:</label>
+                <input type="text" class="form-control" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="head">Глава:</label>
+                <input type="text" class="form-control" id="head" name="head" required>
+            </div>
+            <input type="hidden" name="id" th:value="${shop.id}">
+
+            <button type="submit" class="btn btn-primary">Изменить</button>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/shop_put.js}"></script>
+</body>
+</html>

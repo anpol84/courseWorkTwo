@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p th:text="'ID : ' + ${shop.id}"></p>
+<p th:text="'Phone : ' + ${shop.phone}"></p>
+<p th:text="'Head : ' + ${shop.head}"></p>
+<p th:text="'Address : ' + ${shop.address}"></p>
+<p>Employees</p>
+<table>
+    <thead>
+    <tr>
+        <th>Employee ID</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Salary</th>
+        <th>Position</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="employee : ${shop.getEmployees()}">
+        <td th:text="${employee.id}"></td>
+        <td th:text="${employee.name}"></td>
+        <td th:text="${employee.phone}"></td>
+        <td th:text="${employee.email}"></td>
+        <td th:text="${employee.salary}"></td>
+        <td th:text="${employee.position}"></td>
+    </tr>
+    </tbody>
+</table>
+<script type="text/javascript" th:src="@{/shop_info.js}"></script>
+</body>
+</html>

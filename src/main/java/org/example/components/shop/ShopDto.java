@@ -18,7 +18,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShopDto {
     private Long id;
-    private AddressDto address;
+    private String address;
     private String phone;
     private String head;
     private List<EmployeeDTO> employees = new ArrayList<>();
@@ -36,7 +36,7 @@ public class ShopDto {
         ShopDto shopDto = new ShopDto();
         shopDto.setId(shop.getId());
         if (shop.getAddress() != null) {
-            shopDto.setAddress(AddressDto.fromAddress(shop.getAddress()));
+            shopDto.setAddress(shop.getAddress().toString());
         }else{
             shopDto.setAddress(null);
         }

@@ -58,17 +58,15 @@ public class UserService {
         }
         return false;
     }
-    public ResponseEntity<?> getAll(@NonNull HttpServletRequest request) {
-        if (!checkAdmin(request)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
-        }
+    public List<AdminUserDto> getAll() {
+
         List<User> result1 = userRepository.findAll();
         List<AdminUserDto> result2 = new ArrayList<>();
         for(User user : result1){
              result2.add(AdminUserDto.fromUser(user));
         }
         log.info("IN getAll - {} users found", result2.size());
-        return new ResponseEntity<>(result2, HttpStatus.OK);
+        return result2;
     }
 
     public User findByUsername(String username) {

@@ -2,19 +2,22 @@ package org.example.auth;
 
 import liquibase.pro.packaged.S;
 import lombok.NonNull;
+import org.example.auth.dto.AdminUserDto;
 import org.example.auth.dto.AuthenticationRequestDto;
 import org.example.auth.dto.RegistrationUserDto;
 import org.example.auth.dto.UserDto;
+import org.example.components.shop.Shop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
-@RestController
 @RequestMapping(value = "/api/v1/users")
 public class UserController {
 
@@ -33,8 +36,10 @@ public class UserController {
         return userService.getUser(id, request);
     }
     @GetMapping()
-    public ResponseEntity<?> getAllUsers(@NonNull HttpServletRequest request){
-        return userService.getAll(request);
+    public String getAllUsers(Model model){
+        List<AdminUserDto> users = userService.getAll();
+        model.addAttribute("users", users);
+        return "user";
     }
     @PostMapping
     public ResponseEntity<?> registryAdmin(@RequestBody RegistrationUserDto registrationUserDto,

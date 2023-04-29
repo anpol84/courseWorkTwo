@@ -7,6 +7,8 @@ import org.springframework.context.annotation.*;
 @EnableAspectJAutoProxy
 @EnableMBeanExport
 @Import({DatabaseConfiguration.class,
-         SecurityConfiguration.class})
+         SecurityConfiguration.class,
+         })
 public class ApplicationConfiguration {
+
 }
