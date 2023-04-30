@@ -1,122 +1,58 @@
 package org.example.components.address;
 
-import liquibase.pro.packaged.P;
-import lombok.NonNull;
-import org.example.auth.UserService;
-import org.example.components.empolyee.Employee;
+
 import org.example.components.empolyee.EmployeeRepository;
 import org.example.components.shop.ShopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class AddressService {
     private final AddressRepository addressRepository;
-    private final MyAddressRepository myAddressRepository;
-    private final UserService userService;
+
     private final EmployeeRepository employeeRepository;
     private final ShopRepository shopRepository;
     @Autowired
-    public AddressService(AddressRepository addressRepository, UserService userService,
-                          MyAddressRepository myAddressRepository, EmployeeRepository employeeRepository,
+    public AddressService(AddressRepository addressRepository, EmployeeRepository employeeRepository,
                           ShopRepository shopRepository) {
         this.addressRepository = addressRepository;
-        this.userService = userService;
-        this.myAddressRepository = myAddressRepository;
+
         this.employeeRepository = employeeRepository;
         this.shopRepository = shopRepository;
     }
 
-    public ResponseEntity<?> findAll(HttpServletRequest request){
-        if (!userService.checkAdmin(request)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
-        }
-        Iterable<Address> addresses = addressRepository.findAll();
-        List<AddressDto> addresses2 = new ArrayList<>();
-        for (Address address : addresses){
-            addresses2.add(AddressDto.fromAddress(address));
-        }
-        return new ResponseEntity<>(addresses2, HttpStatus.OK);
+    public List<Address> findAll(){
+        return addressRepository.findAll();
     }
 
-    public ResponseEntity<?> findById(Long id, HttpServletRequest request){
-        if (!userService.checkAdmin(request)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
-        }
+    public Address findById(Long id){
         Optional<Address> address = addressRepository.findById(id);
-        if (!address.isPresent()){
-            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(AddressDto.fromAddress(address.get()), HttpStatus.OK);
+        return address.get();
     }
 
-    public ResponseEntity<?> filter(String region, String city, String street,
-                                         Integer house, Integer flat, HttpServletRequest request){
-        if (!userService.checkAdmin(request)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
-        }
-        Iterable<Address> addresses = myAddressRepository.filter(region, city, street, house, flat);
-        List<AddressDto> addresses2 = new ArrayList<>();
-        for (Address address : addresses){
-            addresses2.add(AddressDto.fromAddress(address));
-        }
-        return new ResponseEntity<>(addresses2, HttpStatus.OK);
-    }
-
-    public ResponseEntity<String> save(Address address, boolean flag, Long id, HttpServletRequest request){
-        if (!userService.checkAdmin(request)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
-        }
+    public void save(Address address, boolean flag, Long id){
         if (flag){
-            if (!(employeeRepository.findById(id)).isPresent()){
-                return new ResponseEntity<>("Employee not found", HttpStatus.NOT_FOUND);
-            }
             address.setEmployee(employeeRepository.getById(id));
         }else{
-            if (shopRepository.getById(id) == null){
-                return new ResponseEntity<>("Shop not found", HttpStatus.NOT_FOUND);
-            }
             address.setShop(shopRepository.getById(id));
         }
         addressRepository.save(address);
-        return new ResponseEntity<>("Saved", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> deleteById(Long id, HttpServletRequest request){
-        if (!userService.checkAdmin(request)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
-        }
-        if (!(addressRepository.findById(id)).isPresent()){
-            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
-        }
+    public void deleteById(Long id){
         addressRepository.deleteById(id);
-        return new ResponseEntity<>("Deleted", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> update(Address address, Long id, Long shop_id, Long employee_id,
-                                         HttpServletRequest request){
-        if (!userService.checkAdmin(request)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
-        }
+    public void update(Address address, Long id, Long shop_id, Long employee_id){
         Optional<Address> address1 = addressRepository.findById(id);
-
-        if (!address1.isPresent()){
-            return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
-        }
         if (shop_id != null) {
             if (address1.get().getEmployee() != null){
-                return new ResponseEntity<>("Bad request", HttpStatus.FORBIDDEN);
-            }
-            if (shopRepository.getById(shop_id) == null){
-                return new ResponseEntity<>("Shop not found", HttpStatus.NOT_FOUND);
+                return;
             }
             address.setShop(shopRepository.getById(shop_id));
         }else{
@@ -124,10 +60,7 @@ public class AddressService {
         }
         if (employee_id != null){
             if (address1.get().getShop() != null){
-                return new ResponseEntity<>("Bad request", HttpStatus.FORBIDDEN);
-            }
-            if (!(employeeRepository.findById(employee_id)).isPresent()){
-                return new ResponseEntity<>("Employee not found", HttpStatus.NOT_FOUND);
+                return;
             }
             address.setEmployee(employeeRepository.getById(employee_id));
         }else{
@@ -135,6 +68,13 @@ public class AddressService {
         }
         address.setId(id);
         addressRepository.save(address);
-        return new ResponseEntity<>("Updated", HttpStatus.OK);
+    }
+
+    public boolean checkShop(Long id){
+        return shopRepository.getById(id) == null;
+    }
+
+    public boolean checkEmployee(Long id){
+        return !employeeRepository.findById(id).isPresent();
     }
 }

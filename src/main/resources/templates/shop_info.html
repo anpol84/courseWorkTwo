@@ -2,36 +2,92 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Информация о магазине</title>
+    <link rel = "stylesheet" th:href="@{/css/info.css}">
+    <link rel = "stylesheet" th:href="@{/css/table.css}">
+    <link rel = "stylesheet" th:href="@{/css/button_back.css}">
 </head>
 <body>
-<p th:text="'ID : ' + ${shop.id}"></p>
-<p th:text="'Phone : ' + ${shop.phone}"></p>
-<p th:text="'Head : ' + ${shop.head}"></p>
-<p th:text="'Address : ' + ${shop.address}"></p>
-<p>Employees</p>
+<div class="info-block">
+    <p th:text="'ID : ' + ${shop.id}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Телефон : ' + ${shop.phone}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Глава : ' + ${shop.head}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Адрес : ' + ${shop.address}"></p>
+</div>
+<div class="employees">
+    <h1>Работники</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>ID Работника</th>
+            <th>ФИО</th>
+            <th>Телефон</th>
+            <th>Почта</th>
+            <th>Зарплата</th>
+            <th>Должность</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee : ${shop.getEmployees()}">
+            <td th:text="${employee.id}"></td>
+            <td th:text="${employee.name}"></td>
+            <td th:text="${employee.phone}"></td>
+            <td th:text="${employee.email}"></td>
+            <td th:text="${employee.salary}"></td>
+            <td th:text="${employee.position}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<h1>Животные</h1>
 <table>
     <thead>
     <tr>
-        <th>Employee ID</th>
-        <th>Name</th>
-        <th>Phone</th>
-        <th>Email</th>
-        <th>Salary</th>
-        <th>Position</th>
+        <th>ID Животного</th>
+        <th>Кличка</th>
+        <th>Вес</th>
+        <th>Гендер</th>
+        <th>Цвет</th>
+        <th>Стоимость</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="employee : ${shop.getEmployees()}">
-        <td th:text="${employee.id}"></td>
-        <td th:text="${employee.name}"></td>
-        <td th:text="${employee.phone}"></td>
-        <td th:text="${employee.email}"></td>
-        <td th:text="${employee.salary}"></td>
-        <td th:text="${employee.position}"></td>
+    <tr th:each="pet : ${shop.getPets()}">
+        <td th:text="${pet.id}"></td>
+        <td th:text="${pet.alias}"></td>
+        <td th:text="${pet.weight}"></td>
+        <td th:text="${pet.gender}"></td>
+        <td th:text="${pet.color}"></td>
+        <td th:text="${pet.price}"></td>
     </tr>
     </tbody>
 </table>
-<script type="text/javascript" th:src="@{/shop_info.js}"></script>
+<h1>Товары</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID товара</th>
+        <th>Закупочная Цена</th>
+        <th>Цена продажи</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${shop.getItems()}">
+        <td th:text="${item.id}"></td>
+        <td th:text="${item.purchasePrice}"></td>
+        <td th:text="${item.sellingPrice}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<button type="button" class="button-back" onclick="history.back()">Назад</button>
+<script type="text/javascript" th:src="@{/js/check_token.js}"></script>
+<script type="text/javascript" th:src="@{/js/shop_info.js}"></script>
 </body>
 </html>

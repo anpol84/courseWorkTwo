@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о товаре</title>
+    <link rel = "stylesheet" th:href="@{/css/info.css}">
+    <link rel = "stylesheet" th:href="@{/css/table.css}">
+    <link rel = "stylesheet" th:href="@{/css/button_back.css}">
+</head>
+<body>
+<div class="info-block">
+    <p th:text="'ID : ' + ${item.id}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Закупочная цена : ' + ${item.purchasePrice}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Цена продажи : ' + ${item.sellingPrice}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'ID категории : ' + ${item.getCategory().id}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Название категории : ' + ${item.getCategory().name}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Средние размеры категории : ' + ${item.getCategory().averageSize}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Цель категории : ' + ${item.getCategory().purpose}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'ID вида : ' + ${item.getKind().id}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Название вида : ' + ${item.getKind().name}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Тип питания : ' + ${item.getKind().eatingWay}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Зона обитания : ' + ${item.getKind().climateZone}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Отряд : ' + ${item.getKind().order}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'ID магазина: ' + ${item.getShop().getId()}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Глава магазина : ' + ${item.getShop().getHead()}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Телефон магазина: ' + ${item.getShop().getPhone()}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Адрес магазина : ' + ${item.getShop()?.getAddress()}"></p>
+</div>
+<button type="button" class = "button-back" onclick="history.back()">Назад</button>
+<script type="text/javascript" th:src="@{/js/check_token.js}"></script>
+<script type="text/javascript" th:src="@{/js/user_access.js}"></script>
+</body>
+
+</html>

@@ -1,6 +1,6 @@
 package org.example.components.empolyee;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 import org.example.components.address.Address;
 import org.example.components.shop.Shop;

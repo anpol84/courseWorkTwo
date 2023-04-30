@@ -7,7 +7,6 @@ import org.example.components.item.ItemDto;
 import org.example.components.pet.Pet;
 import org.example.components.pet.PetDto;
 
-import javax.persistence.Column;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,13 +1,13 @@
 package org.example.auth;
 
-import lombok.NonNull;
+
 import lombok.extern.slf4j.Slf4j;
 import org.example.auth.dto.AdminUserDto;
-import org.example.auth.dto.UserDto;
+
 import org.example.components.base.Status;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -87,29 +88,12 @@ public class UserService {
         return result;
     }
 
-    public ResponseEntity<String> delete(Long id, HttpServletRequest request) {
-        if (!checkAdmin(request)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
-        }
+    public void delete(Long id) {
         userRepository.deleteById(id);
         log.info("IN delete - user with id: {} successfully deleted");
-        return new ResponseEntity<>("Deleted", HttpStatus.OK);
     }
-    public ResponseEntity<?> getUser(Long id, HttpServletRequest request){
-        User user = findById(id);
-        if (user == null){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        if (!checkAdmin(request)) {
-            if (!Objects.equals(getUserId(request), id)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
-            }else{
-                UserDto result = UserDto.fromUser(user);
-                return new ResponseEntity<>(result, HttpStatus.OK);
-            }
-        }
-        AdminUserDto result = AdminUserDto.fromUser(user);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+    public User getUser(Long id){
+        return findById(id);
     }
 
     private Long getUserId(HttpServletRequest request){
@@ -119,10 +103,8 @@ public class UserService {
         return user.getId();
     }
 
-    public ResponseEntity<?> registryAdmin(User user, HttpServletRequest request){
-        if (!checkAdmin(request)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
-        }
+    public void registryAdmin(User user){
+
         Role roleUser = roleRepository.findByName("ROLE_USER");
         Role roleUser2 = roleRepository.findByName("ROLE_ADMIN");
         List<Role> userRoles = new ArrayList<>();
@@ -137,6 +119,14 @@ public class UserService {
 
         log.info("IN register - user: {} successfully registered", registeredUser);
 
-        return new ResponseEntity<>(registeredUser, HttpStatus.OK);
+    }
+
+    public void update(User user, Long id){
+        Optional<User> user1 = userRepository.findById(id);
+        user.setId(id);
+        user.setStatus(Status.ACTIVE);
+        user.setRoles(user1.get().getRoles());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 }

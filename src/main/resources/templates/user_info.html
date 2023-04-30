@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о пользователе</title>
+    <link rel = "stylesheet" th:href="@{/css/info.css}">
+    <link rel = "stylesheet" th:href="@{/css/table.css}">
+    <link rel = "stylesheet" th:href="@{/css/button_back.css}">
+</head>
+<body>
+<div class="info-block">
+    <p th:text="'ID : ' + ${user.id}" id = "id"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Никнейм : ' + ${user.username}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Имя : ' + ${user.firstName}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Фамилия : ' + ${user.lastName}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Почта : ' + ${user.email}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Пароль : ' + ${user.password}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Статус : ' + ${user.status}"></p>
+</div>
+<form th:action="@{/api/v1/users}" th:method="delete" class="delete-form">
+    <input type="hidden" name="id" th:value="${user.id}" class="delete-input" />
+    <button type="submit" class="button-back">Удалить</button>
+</form>
+<form th:action="@{/api/v1/users/update}" th:method="get" class="update-form">
+    <input type="hidden" name="id" th:value="${user.id}" class="update-input" />
+    <button type="submit" class="button-back">Изменить</button>
+</form>
+<button type="button" class="button-back" onclick="history.back()">Назад</button>
+<script type="text/javascript" th:src="@{/js/check_token.js}"></script>
+<script type="text/javascript" th:src="@{/js/user_info.js}"></script>
+</body>
+</html>

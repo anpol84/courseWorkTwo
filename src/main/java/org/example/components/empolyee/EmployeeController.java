@@ -1,52 +1,69 @@
 package org.example.components.empolyee;
 
-import lombok.NonNull;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+
+import org.example.components.address.Address;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
-@RestController
+import java.util.List;
+
+
+@Controller
 @RequestMapping("/api/v1/employees")
 @RequiredArgsConstructor
 public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping("")
-    public ResponseEntity<?> findAll(@RequestParam(value = "name", required = false) String name,
-                                          @RequestParam(value = "email", required = false) String email,
-                                          @RequestParam(value = "phone", required = false) String phone,
-                                          @RequestParam(value = "salary", required = false) Double salary,
-                                          @RequestParam(value = "position", required = false) String position,
-                                          @NonNull HttpServletRequest request){
-        if (name != null || email != null || phone != null || salary != null || position != null) {
-            return employeeService.filter(name, email, phone, salary, position, request);
-        } else {
-            return employeeService.findAll(request);
-        }
+    public String findAll(Model model){
+        List<Employee> employees =  employeeService.findAll();
+        model.addAttribute("employees", employees);
+
+        return "employee";
     }
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id, @NonNull HttpServletRequest request){
-        return employeeService.findById(id, request);
+    public String findById(@PathVariable Long id, Model model){
+        model.addAttribute("employee", employeeService.findById(id));
+        return "employee_info";
+    }
+    @GetMapping("/update")
+    public String updatePage(@RequestParam Long id, @RequestParam Long shop_id,
+                             @ModelAttribute Employee employee, Model model){
+        model.addAttribute("id", id);
+        model.addAttribute("shop_id", shop_id);
+        model.addAttribute("employee", employee);
+        return "employee_put";
+
     }
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody Employee employee, @NonNull HttpServletRequest request,
-                                       @RequestParam Long shop_id){
-        return employeeService.save(employee, request, shop_id);
+    public String save(@ModelAttribute Employee employee, @RequestParam Long shop_id, Model model){
+        if (employeeService.checkShop(shop_id)){
+            model.addAttribute("message", "No such shop");
+            return findAll(model);
+        }
+        employeeService.save(employee, shop_id);
+        return findAll(model);
+
     }
     @DeleteMapping
-    public ResponseEntity<String> deleteById(@RequestParam Long id, @NonNull HttpServletRequest request){
-        return employeeService.deleteById(id, request);
+    public String deleteById(@RequestParam Long id, Model model){
+        employeeService.deleteById(id);
+        return findAll(model);
     }
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody Employee employee, @RequestParam Long id,
-                                         @RequestParam(required = false) Long shop_id,
-                                         @NonNull HttpServletRequest request){
-        return employeeService.update(employee, id, shop_id, request);
+    public String update(@ModelAttribute Employee employee, @RequestParam Long id,
+                                         @RequestParam Long shop_id, Model model){
+        if (shop_id != null && employeeService.checkShop(shop_id)){
+            model.addAttribute("message", "No such shop");
+            return findAll(model);
+        }
+        employeeService.update(employee, id, shop_id);
+        return findAll(model);
     }
 
 }

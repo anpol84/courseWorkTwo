@@ -1,13 +1,17 @@
 package org.example.components.category;
 
-import lombok.NonNull;
+
+import org.example.components.address.Address;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 
-@RestController
+import java.util.List;
+
+@Controller
 @RequestMapping("/api/v1/categories")
 public class CategoryController {
     private final CategoryService categoryService;
@@ -17,33 +21,41 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<?> findAll(@RequestParam(name = "name", required = false) String name,
-                                          @RequestParam(name = "purpose", required = false) String purpose,
-                                          @RequestParam(name = "averageSize", required = false) String averageSize){
-        if (name != null || purpose != null || averageSize != null){
-            return categoryService.filter(name, purpose, averageSize);
-        }
-        return categoryService.findAll();
+    public String findAll(Model model){
+        List<Category> categories = categoryService.findAll();
+        model.addAttribute("categories", categories);
+        return "category";
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id){
-        return categoryService.findById(id);
+    public String findById(@PathVariable Long id, Model model){
+        model.addAttribute("category", categoryService.findById(id));
+        return "category_info";
+    }
+
+    @GetMapping("/update")
+    public String updatePage(@RequestParam Long id, @ModelAttribute Category category, Model model){
+        model.addAttribute("id", id);
+        model.addAttribute("category", category);
+        return "category_put";
     }
 
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody Category category, @NonNull HttpServletRequest request){
-        return categoryService.save(category, request);
+    public String save(@ModelAttribute Category category, Model model){
+        categoryService.save(category);
+        return findAll(model);
     }
 
     @DeleteMapping
-    public ResponseEntity<String> deleteById(@RequestParam Long id, @NonNull HttpServletRequest request){
-        return categoryService.deleteById(id, request);
+    public String deleteById(@RequestParam Long id, Model model){
+        categoryService.deleteById(id);
+        return findAll(model);
     }
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody Category category, @RequestParam Long id,
-                                         @NonNull HttpServletRequest request){
-        return categoryService.update(category, id, request);
+    public String update(@ModelAttribute Category category, @RequestParam Long id,
+                                         Model model){
+        categoryService.update(category, id);
+        return findAll(model);
     }
 }

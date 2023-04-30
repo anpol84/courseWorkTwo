@@ -1,13 +1,13 @@
 package org.example.components.shop;
 
-import lombok.NonNull;
+import org.example.components.kind.Kind;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+
 import java.util.List;
 
 @Controller
@@ -31,6 +31,12 @@ public class ShopController {
         model.addAttribute("shop", ShopDto.fromShop(shop));
         return "shop_info";
     }
+    @GetMapping("/update")
+    public String updatePage(@ModelAttribute Shop shop, @RequestParam Long id, Model model){
+        model.addAttribute("id", id);
+        model.addAttribute("shop", shop);
+        return "shop_put";
+    }
 
     @PostMapping
     public String save(@ModelAttribute Shop shop, Model model){
@@ -44,8 +50,8 @@ public class ShopController {
     }
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody Shop shop, @RequestParam Long id,
-                                         @NonNull HttpServletRequest request){
-        return shopService.update(shop, id, request);
+    public String update(@ModelAttribute Shop shop, @RequestParam Long id, Model model){
+        shopService.update(shop, id);
+        return getShops(model);
     }
 }

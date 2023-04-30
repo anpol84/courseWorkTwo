@@ -1,52 +1,98 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>User Management</title>
+  <title>Пользователи</title>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel = "stylesheet" th:href="@{/css/table.css}">
+  <link rel = "stylesheet" th:href="@{/css/form.css}">
+  <link rel = "stylesheet" th:href="@{/css/header.css}">
+  <script type="text/javascript" src="/js/check_token.js"></script>
 </head>
 <body>
-<h1>Welcome to User Management</h1>
-<h2>User List:</h2>
+<header>
+  <nav>
+    <a th:href="@{/api/v1/shops}">Магазины</a>
+    <a th:href="@{/api/v1/employees}" id ="employees">Работники</a>
+    <a th:href="@{/api/v1/pets}">Животные</a>
+    <a th:href="@{/api/v1/items}">Товары</a>
+    <a th:href="@{/api/v1/kinds}">Виды животных</a>
+    <a th:href="@{/api/v1/categories}">Категории товаров</a>
+    <a th:href="@{/api/v1/addresses}">Адреса</a>
+    <a th:href="@{/api/v1/users}" id="addresses">Пользователи</a>
+    <a th:href="@{/api/v1/auth/login}">Выход</a>
+  </nav>
+</header>
+<h1 id="main-heading">Пользователи</h1>
+<form th:action="@{/api/v1/users}" method="post" class="f">
+  <fieldset>
+    <h2 class="fs-title">Новый Пользователь</h2>
+    <div>
+      <label for="username">Никнейм:</label>
+      <input type="text" id="username" name="username"/>
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password"/>
+    </div>
+    <div class="form-group">
+      <label for="firstName">Имя:</label>
+      <input type="text" class="form-control" id="firstName" name="firstName" required>
+    </div>
+    <div class="form-group">
+      <label for="lastName">Фамилия:</label>
+      <input type="text" class="form-control" id="lastName" name="lastName" required>
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Создать пользователя</button>
+  </fieldset>
+</form>
 <table>
   <thead>
   <tr>
     <th>ID</th>
-    <th>Username</th>
-    <th>Email</th>
-    <th>Actions</th>
+    <th>Никнейм</th>
+    <th>Имя</th>
+    <th>Фамилия</th>
+    <th>Почта</th>
+    <th>Действия</th>
   </tr>
   </thead>
   <tbody>
   <tr th:each="user : ${users}">
     <td th:text="${user.id}"></td>
     <td th:text="${user.username}"></td>
+    <td th:text="${user.firstName}"></td>
+    <td th:text="${user.lastName}"></td>
     <td th:text="${user.email}"></td>
     <td>
-      <form th:action="@{'/api/v1/users/' + ${user.id}}" method="post">
-        <input type="hidden" name="_method" value="delete"/>
-        <button type="submit">Delete</button>
-      </form>
+      <div class="btn-group">
+        <form th:action="@{/api/v1/users}" th:method="delete" class="delete-form">
+          <input type="hidden" name="id" th:value="${user.id}" class="delete-input" />
+          <button type="submit" class="btn btn-danger delete-btn">Удалить</button>
+        </form>
+        <form th:action="@{/api/v1/users/update}" th:method="get" class="update-form">
+          <input type="hidden" name="id" th:value="${user.id}" class="update-input" />
+          <input type="hidden" name="username" th:value="${user.username}" class="update-input" />
+          <input type="hidden" name="fistName" th:value="${user.firstName}" class="update-input" />
+          <input type="hidden" name="lastName" th:value="${user.lastName}" class="update-input" />
+          <input type="hidden" name="email" th:value="${user.email}" class="update-input" />
+          <input type="hidden" name="password"  class="update-input" />
+          <button type="submit" class="btn btn-secondary update-btn">Изменить</button>
+        </form>
+        <form th:action="@{/api/v1/users/{id}(id=${user.id})}" th:method="get" class="details-form">
+          <button type="submit" class="btn btn-third details-btn">Подробнее</button>
+        </form>
+      </div>
     </td>
   </tr>
   </tbody>
 </table>
-<h2>Create User:</h2>
-<form th:action="@{/api/v1/users}" method="post">
-  <div>
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username"/>
-  </div>
-  <div>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password"/>
-  </div>
-  <div>
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email"/>
-  </div>
-  <button type="submit">Create User</button>
-</form>
-<script type="text/javascript" th:src="@{/user.js}"></script>
+
+<script type="text/javascript" th:src="@{/js/admin_access.js}"></script>
+<script type="text/javascript" th:src="@{/js/header_role.js}"></script>
 </body>
 </html>

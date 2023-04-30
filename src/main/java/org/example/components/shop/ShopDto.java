@@ -2,8 +2,7 @@ package org.example.components.shop;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import org.example.components.address.Address;
-import org.example.components.address.AddressDto;
+
 import org.example.components.empolyee.Employee;
 import org.example.components.empolyee.EmployeeDTO;
 import org.example.components.item.Item;

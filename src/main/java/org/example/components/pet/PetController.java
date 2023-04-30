@@ -1,13 +1,16 @@
 package org.example.components.pet;
 
-import lombok.NonNull;
-import org.springframework.http.ResponseEntity;
+
+import org.example.components.item.Item;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
-@RestController
+import java.util.List;
+
+
+@Controller
 @RequestMapping("/api/v1/pets")
 public class PetController {
     private final PetService petService;
@@ -17,40 +20,66 @@ public class PetController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> filter(@RequestParam(name = "weight", required = false) Double weight,
-                                         @RequestParam(name = "alias", required = false) String alias,
-                                         @RequestParam(name = "gender", required = false) String gender,
-                                         @RequestParam(name = "color", required = false) String color,
-                                         @RequestParam(name = "price", required = false) Double price){
-        if  (weight != null || alias != null || gender != null || color != null || price != null){
-            return petService.filter(weight, alias, gender, color, price);
-        }
-        return petService.findAll();
+    public String findAll(Model model){
+        List<Pet> pets = petService.findAll();
+        model.addAttribute("pets", pets);
+        return "pet";
     }
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id){
-        return petService.findById(id);
+    public String findById(@PathVariable Long id, Model model){
+        model.addAttribute("pet", petService.findById(id));
+        return "pet_info";
     }
 
+    @GetMapping("/update")
+    public String updatePage(@ModelAttribute Pet pet, @RequestParam Long id,
+                             @RequestParam Long shop_id, @RequestParam Long kind_id, Model model){
+        model.addAttribute("id", id);
+        model.addAttribute("pet", pet);
+        model.addAttribute("shop_id", shop_id);
+        model.addAttribute("kind_id", kind_id);
+        return "pet_put";
+    }
 
 
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody Pet pet, @NonNull HttpServletRequest request,
+    public String save(@ModelAttribute Pet pet, Model model,
                                        @RequestParam Long shop_id, @RequestParam Long kind_id){
-        return petService.save(pet, request, shop_id, kind_id);
+        if (petService.checkKind(kind_id)){
+            model.addAttribute("message", "No Such Kind");
+            return findAll(model);
+        }
+        if (petService.checkShop(shop_id)){
+            model.addAttribute("message", "No Such Shop");
+            return findAll(model);
+        }
+        petService.save(pet, shop_id, kind_id);
+        return findAll(model);
+
     }
 
     @DeleteMapping
-    public ResponseEntity<String> deleteById(@RequestParam Long id, @NonNull HttpServletRequest request){
-        return petService.deleteById(id, request);
+    public String deleteById(@RequestParam Long id, Model model){
+        petService.deleteById(id);
+        return findAll(model);
     }
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody Pet pet, @RequestParam Long id,
+    public String update(@ModelAttribute Pet pet, @RequestParam Long id,
                                          @RequestParam(required = false) Long shop_id,
                                          @RequestParam(required = false) Long kind_id,
-                                         @NonNull HttpServletRequest request){
-        return petService.update(pet, id, shop_id, kind_id, request);
+                                        Model model){
+        if (kind_id != null && petService.checkKind(kind_id)){
+            model.addAttribute("message", "No Such Kind");
+            return findAll(model);
+        }
+        if (shop_id != null && petService.checkShop(shop_id)){
+            model.addAttribute("message", "No Such Shop");
+            return findAll(model);
+        }
+        model.addAttribute("id", id);
+        petService.update(pet, id, shop_id, kind_id);
+        return findAll(model);
     }
 
 }

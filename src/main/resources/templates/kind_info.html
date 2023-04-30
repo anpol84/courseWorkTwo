@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о виде животного</title>
+    <link rel = "stylesheet" th:href="@{/css/info.css}">
+    <link rel = "stylesheet" th:href="@{/css/table.css}">
+    <link rel = "stylesheet" th:href="@{/css/button_back.css}">
+</head>
+<body>
+<div class="info-block">
+    <p th:text="'ID : ' + ${kind.id}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Название : ' + ${kind.name}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Тип питания : ' + ${kind.eatingWay}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Зона обитания : ' + ${kind.climateZone}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Отряд : ' + ${kind.order}"></p>
+</div>
+<h1>Животные</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID Животного</th>
+        <th>Кличка</th>
+        <th>Вес</th>
+        <th>Гендер</th>
+        <th>Цвет</th>
+        <th>Стоимость</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="pet : ${kind.getPets()}">
+        <td th:text="${pet.id}"></td>
+        <td th:text="${pet.alias}"></td>
+        <td th:text="${pet.weight}"></td>
+        <td th:text="${pet.gender}"></td>
+        <td th:text="${pet.color}"></td>
+        <td th:text="${pet.price}"></td>
+    </tr>
+    </tbody>
+</table>
+<h1>Товары</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID товара</th>
+        <th>Закупочная Цена</th>
+        <th>Цена продажи</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${kind.getItems()}">
+        <td th:text="${item.id}"></td>
+        <td th:text="${item.purchasePrice}"></td>
+        <td th:text="${item.sellingPrice}"></td>
+    </tr>
+    </tbody>
+</table>
+<button type="button" class = "button-back" onclick="history.back()">Назад</button>
+<script type="text/javascript" th:src="@{/js/check_token.js}"></script>
+<script type="text/javascript" th:src="@{/js/user_access.js}"></script>
+</body>
+</html>

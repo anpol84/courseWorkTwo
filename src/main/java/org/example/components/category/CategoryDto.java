@@ -5,7 +5,7 @@ import lombok.Data;
 import org.example.components.item.Item;
 import org.example.components.item.ItemDto;
 
-import javax.persistence.Column;
+
 import java.util.ArrayList;
 import java.util.List;
 

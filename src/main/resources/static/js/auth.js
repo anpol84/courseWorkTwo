@@ -1,8 +1,7 @@
 let token;
 let role;
-
+let id
 const form = document.getElementById('form1');
-
 if (form != null) {
 
     form.addEventListener('submit', (event) => {
@@ -22,6 +21,7 @@ if (form != null) {
 
                 return response.json(); // Парсим ответ в формате JSON
             } else {
+                alert("Неправильный логин или пароль")
                 throw new Error(`Error ${response.status}: ${response.statusText}`);
             }
         }).then(data => {
@@ -29,8 +29,11 @@ if (form != null) {
             //document.cookie = `token=${data.token}`
             token = data.token
             role = data.role
+            id = data.id
             sessionStorage.setItem('token', token)
             sessionStorage.setItem('role', role)
+            sessionStorage.setItem('id', id)
+
             if (role != null){
                 location.href = '/api/v1/users'
             }else{
@@ -68,6 +71,7 @@ form2.addEventListener('submit', (event) => {
 
             return response.json(); // Парсим ответ в формате JSON
         } else {
+            alert("Пользователь с такими данными уже существует")
             throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
     }).then(data => {
@@ -75,8 +79,10 @@ form2.addEventListener('submit', (event) => {
         //document.cookie = `token=${data.token}`
         token = data.token
         role = data.role
+        id = data.id
         sessionStorage.setItem('token', token)
         sessionStorage.setItem('role', role)
+        sessionStorage.setItem('id', id)
         if (role != null){
             location.href = '/api/v1/users'
         }else{
@@ -86,4 +92,17 @@ form2.addEventListener('submit', (event) => {
     }).catch(error => {
         console.error(error);
     });
+});
+
+const signInBtn = document.querySelector('.signin-btn');
+const signUpBtn = document.querySelector('.signup-btn');
+const formBox = document.querySelector('.form-box');
+const body = document.body;
+signUpBtn.addEventListener('click', function(){
+    formBox.classList.add('active');
+    body.classList.add('active');
+});
+signInBtn.addEventListener('click', function(){
+    formBox.classList.remove('active');
+    body.classList.remove('active');
 });

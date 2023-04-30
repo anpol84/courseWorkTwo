@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменить адрес</title>
+    <link rel = "stylesheet" th:href="@{/css/form.css}">
+    <link rel = "stylesheet" th:href="@{/css/button_back.css}">
+</head>
+<body>
+<div class="card mb-3">
+    <div class="card-body">
+        <form th:action="@{/api/v1/addresses}" th:method="put" class="f">
+            <fieldset>
+                <h2 class="fs-title">Изменить адрес</h2>
+                <div class="form-group">
+                    <label for="region">Регион:</label>
+                    <input type="text" th:value="${address.region}" class="form-control" id="region" name="region" required>
+                </div>
+                <div class="form-group">
+                    <label for="city">Город:</label>
+                    <input type="text" th:value="${address.city}" class="form-control" id="city" name="city" required>
+                </div>
+                <div class="form-group">
+                    <label for="street">Улица:</label>
+                    <input type="text" th:value="${address.street}" class="form-control" id="street" name="street" required>
+                </div>
+                <div class="form-group">
+                    <label for="house">Дом:</label>
+                    <input type="number" th:value="${address.house}" class="form-control" id="house" name="house" required>
+                </div>
+                <div class="form-group">
+                    <label for="flat">Квартира:</label>
+                    <input type="number" th:value="${address.flat}" class="form-control" id="flat" name="flat" required>
+                </div>
+                <div class="form-group">
+                    <label for="shop_id">ID магазина:</label>
+                    <input type="number" th:value="${shop_id}"  class="form-control" id="shop_id" name="shop_id">
+                </div>
+                <div class="form-group">
+                    <label for="employee_id">ID работника:</label>
+                    <input type="number" th:value="${employee_id}" class="form-control" id="employee_id" name="employee_id">
+                </div>
+                <input type="hidden" name="id" th:value="${id}">
+                <button type="submit" class="btn btn-primary">Изменить</button>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<button type="button" class="button-back" onclick="history.back()">Назад</button>
+<script type="text/javascript" th:src="@{/js/check_token.js}"></script>
+<script type="text/javascript" th:src="@{/js/admin_access_info.js}"></script>
+</body>
+</html>

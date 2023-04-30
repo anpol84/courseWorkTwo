@@ -2,7 +2,7 @@ package org.example.components.category;
 
 import lombok.Data;
 import org.example.components.item.Item;
-import org.example.components.pet.Pet;
+
 
 import javax.persistence.*;
 import java.util.ArrayList;

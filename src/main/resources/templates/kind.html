@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Виды животных</title>
+    <link rel = "stylesheet" th:href="@{/css/table.css}">
+    <link rel = "stylesheet" th:href="@{/css/form.css}">
+    <link rel = "stylesheet" th:href="@{/css/header.css}">
+</head>
+<body>
+<header>
+    <nav>
+        <a th:href="@{/api/v1/shops}">Магазины</a>
+        <a th:href="@{/api/v1/employees}" id ="employees">Работники</a>
+        <a th:href="@{/api/v1/pets}">Животные</a>
+        <a th:href="@{/api/v1/items}">Товары</a>
+        <a th:href="@{/api/v1/kinds}">Виды животных</a>
+        <a th:href="@{/api/v1/categories}">Категории товаров</a>
+        <a th:href="@{/api/v1/addresses}" id="addresses">Адреса</a>
+        <a th:href="@{/api/v1/users}">Пользователи</a>
+        <a th:href="@{/api/v1/auth/login}">Выход</a>
+    </nav>
+</header>
+<div class="container">
+    <h1 id="main-heading">Виды животных</h1>
+
+    <!-- Форма для создания нового магазина -->
+    <div class="card mb-3" id="new-kind-form">
+
+        <div class="card-body">
+            <form th:action="@{/api/v1/kinds}" method="post" class="f">
+                <fieldset>
+                    <h2 class="fs-title">Новый Вид Животного</h2>
+                    <div class="form-group">
+                        <label for="name">Название:</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="eatingWay">Тип питания:</label>
+                        <input type="text" class="form-control" id="eatingWay" name="eatingWay" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="climateZone">Зона обитания:</label>
+                        <input type="text" class="form-control" id="climateZone" name="climateZone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="order">Отряд:</label>
+                        <input type="text" class="form-control" id="order" name="order" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Создать</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <!-- Таблица для отображения магазинов -->
+    <table class="table table-striped" id="kind-table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Название вида</th>
+            <th>Тип питания</th>
+            <th>Зона обитания</th>
+            <th>Отряд</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="kind, iterationStatus : ${kinds}" class="kind-row">
+            <td th:text="${iterationStatus.index + 1}" class="kind-index"></td>
+            <td th:text="${kind.name}" class="kind-name"></td>
+            <td th:text="${kind.eatingWay}" class="kind-eatingWay"></td>
+            <td th:text="${kind.climateZone}" class="kind-climateZone"></td>
+            <td th:text="${kind.order}" class="kind-order"></td>
+            <td>
+                <div class="btn-group" role="group">
+                    <form th:action="@{/api/v1/kinds}" th:method="delete" class="delete-form">
+                        <input type="hidden" name="id" th:value="${kind.id}" class="delete-input" />
+                        <button type="submit" class="btn btn-danger delete-btn">Удалить</button>
+                    </form>
+                    <form th:action="@{/api/v1/kinds/update}" th:method="get" class="update-form">
+                        <input type="hidden" name="id" th:value="${kind.id}" class="update-input" />
+                        <input type="hidden" name="name" th:value="${kind.name}" class="update-input" />
+                        <input type="hidden" name="eatingWay" th:value="${kind.eatingWay}" class="update-input" />
+                        <input type="hidden" name="climateZone" th:value="${kind.climateZone}" class="update-input" />
+                        <input type="hidden" name="order" th:value="${kind.order}" class="update-input" />
+                        <button type="submit" class="btn btn-secondary update-btn">Изменить</button>
+                    </form>
+                    <form th:action="@{/api/v1/kinds/{id}(id=${kind.id})}" th:method="get" class="details-form">
+                        <button type="submit" class="btn btn-third details-btn">Подробнее</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Импорт библиотеки jQuery -->
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/check_token.js}"></script>
+<script type="text/javascript" th:src="@{/js/admin_with_user_access.js}"></script>
+<script type="text/javascript" th:src="@{/js/header_role.js}"></script>
+</body>
+</html>
