@@ -2,8 +2,7 @@ package org.example.components.shop;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import org.example.components.address.Address;
-import org.example.components.address.AddressDto;
+
 import org.example.components.empolyee.Employee;
 import org.example.components.empolyee.EmployeeDTO;
 import org.example.components.item.Item;
@@ -18,7 +17,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShopDto {
     private Long id;
-    private AddressDto address;
+    private String address;
     private String phone;
     private String head;
     private List<EmployeeDTO> employees = new ArrayList<>();
@@ -36,7 +35,7 @@ public class ShopDto {
         ShopDto shopDto = new ShopDto();
         shopDto.setId(shop.getId());
         if (shop.getAddress() != null) {
-            shopDto.setAddress(AddressDto.fromAddress(shop.getAddress()));
+            shopDto.setAddress(shop.getAddress().toString());
         }else{
             shopDto.setAddress(null);
         }

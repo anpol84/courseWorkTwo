@@ -1,16 +1,15 @@
 package org.example.components.address;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
+
+import org.springframework.stereotype.Controller;
+
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/api/v1/addresses")
 public class AddressController {
     private final AddressService addressService;
@@ -20,48 +19,65 @@ public class AddressController {
     }
 
     @GetMapping
-    public ResponseEntity<?> findAll(@RequestParam(name = "region", required = false) String region,
-                                          @RequestParam(name="city", required = false) String city,
-                                          @RequestParam(name="street", required = false) String street,
-                                          @RequestParam(name="house", required = false) Integer house,
-                                          @RequestParam(name="flat", required = false) Integer flat,
-                                          @NonNull HttpServletRequest request){
-        if (region != null || city != null || street != null || house != null || flat != null){
-            return addressService.filter(region, city, street, house, flat, request);
-        }
-        return addressService.findAll(request);
+    public String findAll(Model model){
+        List<Address> addresses =  addressService.findAll();
+        model.addAttribute("addresses", addresses);
+        return "address";
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id, @NonNull HttpServletRequest request){
-        return addressService.findById(id, request);
+    public String findById(@PathVariable Long id, Model model){
+        model.addAttribute("address", addressService.findById(id));
+        return "address_info";
+    }
+    @GetMapping("/update")
+    public String updatePage(@RequestParam Long id,@RequestParam(required = false) Long employee_id,
+                             @RequestParam(required = false) Long shop_id, @ModelAttribute Address address, Model model){
+        model.addAttribute("id", id);
+        model.addAttribute("address", address);
+        model.addAttribute("employee_id", employee_id);
+        model.addAttribute("shop_id", shop_id);
+
+        return "address_put";
     }
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody Address address, @NonNull HttpServletRequest request,
+    public String save(@ModelAttribute Address address, Model model,
                                        @RequestParam(name="employee_id", required = false) Long employee_id,
                                        @RequestParam(name="shop_id", required = false) Long shop_id){
         if (shop_id != null && employee_id != null || shop_id == null && employee_id == null){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+            model.addAttribute("message", "Error with entities");
+            return findAll(model);
         }
         if (employee_id != null){
-            return addressService.save(address, true, employee_id, request);
+            addressService.save(address, true, employee_id);
         }else{
-            return addressService.save(address, false, shop_id, request);
+            addressService.save(address, false, shop_id);
         }
+        return findAll(model);
     }
     @DeleteMapping
-    public ResponseEntity<String> deleteById(@RequestParam Long id, @NonNull HttpServletRequest request){
-        return addressService.deleteById(id, request);
+    public String deleteById(@RequestParam Long id, Model model){
+        addressService.deleteById(id);
+        return findAll(model);
     }
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody Address address, @RequestParam Long id,
+    public String update(@ModelAttribute Address address, @RequestParam Long id, Model model,
                                          @RequestParam(required = false) Long shop_id,
-                                         @RequestParam(required = false) Long employee_id,
-                                         @NonNull HttpServletRequest request){
+                                         @RequestParam(required = false) Long employee_id){
         if (shop_id != null && employee_id != null ){
-            return new ResponseEntity<>("Access Denied", HttpStatus.FORBIDDEN);
+            model.addAttribute("message", "Error with entities");
+            return findAll(model);
         }
-        return addressService.update(address, id, shop_id, employee_id, request);
+        if (shop_id != null && addressService.checkShop(shop_id)){
+            model.addAttribute("message", "No such shop");
+            return findAll(model);
+        }
+        if (employee_id != null && addressService.checkEmployee(employee_id)){
+            model.addAttribute("message", "No such employee");
+            return findAll(model);
+        }
+        addressService.update(address, id, shop_id, employee_id);
+        return findAll(model);
     }
 }

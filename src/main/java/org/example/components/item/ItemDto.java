@@ -3,7 +3,6 @@ package org.example.components.item;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
-import javax.persistence.Column;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)

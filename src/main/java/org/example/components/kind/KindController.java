@@ -1,13 +1,16 @@
 package org.example.components.kind;
 
-import lombok.NonNull;
+import org.example.components.empolyee.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 
-@RestController
+import java.util.List;
+
+@Controller
 @RequestMapping("/api/v1/kinds")
 public class KindController {
     private KindService kindService;
@@ -16,33 +19,39 @@ public class KindController {
         this.kindService = kindService;
     }
     @GetMapping
-    public ResponseEntity<?> findAll(@RequestParam(name = "name", required = false) String name,
-                                          @RequestParam(name = "eatingWay", required = false) String eatingWay,
-                                          @RequestParam(name = "climateZone", required = false) String climateZone,
-                                          @RequestParam(name = "order", required = false) String order){
-        if (name != null || eatingWay != null || climateZone != null || order != null){
-            return kindService.filter(name, eatingWay, climateZone, order);
-        }
-        return kindService.findAll();
+    public String findAll(Model model){
+        List<Kind> kinds = kindService.findAll();
+        model.addAttribute("kinds", kinds);
+        return "kind";
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id){
-        return kindService.findById(id);
+    public String findById(@PathVariable Long id, Model model){
+        model.addAttribute("kind", kindService.findById(id));
+        return "kind_info";
+    }
+    @GetMapping("/update")
+    public String updatePage(@ModelAttribute Kind kind, @RequestParam Long id, Model model){
+        model.addAttribute("id", id);
+        model.addAttribute("kind", kind);
+        return "kind_put";
     }
 
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody Kind kind, @NonNull HttpServletRequest request){
-        return kindService.save(kind, request);
+    public String save(@ModelAttribute Kind kind, Model model){
+        kindService.save(kind);
+        return findAll(model);
     }
 
     @DeleteMapping
-    public ResponseEntity<String> deleteById(@RequestParam Long id, @NonNull HttpServletRequest request){
-        return kindService.deleteById(id, request);
+    public String deleteById(@RequestParam Long id, Model model){
+        kindService.deleteById(id);
+        return findAll(model);
     }
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody Kind kind, @RequestParam Long id,
-                                         @NonNull HttpServletRequest request){
-        return kindService.update(kind, id, request);
+    public String update(@ModelAttribute Kind kind, @RequestParam Long id, Model model){
+        kindService.update(kind, id);
+        return findAll(model);
     }
 }

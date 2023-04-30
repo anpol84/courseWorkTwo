@@ -3,13 +3,7 @@ package org.example.auth;
 import lombok.Data;
 import org.example.components.base.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 
@@ -34,6 +28,8 @@ public class User extends BaseEntity {
 
     @Column(name = "password")
     private String password;
+    @Transient
+    private String token;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",

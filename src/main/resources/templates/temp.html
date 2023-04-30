@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Вход</title>
+    <link rel = "icon" type = "image/png" href ="image_main\logo_free-file.png">
+    <link rel = "stylesheet" href = "style_entry.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div class = "container">
+    <div class = "block">
+        <div class = "block__item block-item">
+            <h2 class = "block-item__title" id = "black">У вас уже есть аккаунт?</h2>
+            <button class = "block-item__btn signin-btn">Войти</button>
+        </div>
+        <div class = "block__item block-item">
+            <h2 class = "block-item__title">У вас нет аккаунта?</h2>
+            <button class = "block-item__btn signup-btn">Зарегистрироваться</button>
+        </div>
+    </div>
+    <div class = "form-box">
+        <form class = "form form_signin">
+            <h3 class = "form__title">Вход</h3>
+            <p>
+                <input id = "login" type = "text" class = "form__input" placeholder="Логин">
+            </p>
+            <p>
+                <input id = "password" type = "password" class = "form__input" placeholder="Пароль">
+            </p>
+            <p>
+                <button id = "inBtn" class = "form__btn">Войти</button>
+            </p>
+            <p>
+                <a id = "new_password" href = "#" class = "form__forgot">Восстановить пароль</a>
+            </p>
+            <p>
+                <a href = "index.html" class = "form__forgot">На главную страницу</a>
+            </p>
+        </form>
+        <form class = "form form_signup">
+            <h3 class = "form__title">Регистрация</h3>
+            <p>
+                <input id = "new_login" type = "text" class = "form__input" placeholder="Логин">
+            </p>
+            <p>
+                <input id = "new_mail" type = "email" class = "form__input" placeholder="Email">
+            </p>
+
+            <p>
+                <input id = "password_for_registration" type = "password" class = "form__input" placeholder="Пароль">
+            </p>
+            <p>
+                <input id = "password_for_check" type = "password" class = "form__input" placeholder="Подтвердите Пароль">
+            </p>
+            <p>
+                <button id = "upBtn" class = "form__btn form__btn_signup" >Зарегистрироваться</button>
+            </p>
+            <p>
+                <a href = "index.html" class = "form__forgot">На главную страницу</a>
+            </p>
+
+        </form>
+    </div>
+</div>
+<script src = "script_entry.js"></script>
+</body>
+</html>

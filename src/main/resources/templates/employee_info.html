@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о работниках</title>
+    <link rel = "stylesheet" th:href="@{/css/info.css}">
+    <link rel = "stylesheet" th:href="@{/css/table.css}">
+    <link rel = "stylesheet" th:href="@{/css/button_back.css}">
+</head>
+<body>
+<div class="info-block">
+    <p th:text="'ID : ' + ${employee.id}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Имя : ' + ${employee.name}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Телефон : ' + ${employee.phone}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Почта : ' + ${employee.email}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Зарплата : ' + ${employee.salary}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Должность : ' + ${employee.position}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Адрес : ' + ${employee.address}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'ID магазина: ' + ${employee.getShop().getId()}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Глава магазина : ' + ${employee.getShop().getHead()}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Телефон магазина : ' + ${employee.getShop().getPhone()}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Адрес магазина : ' + ${employee.getShop()?.getAddress()}"></p>
+</div>
+<button type="button" class = "button-back" onclick="history.back()">Назад</button>
+<script type="text/javascript" th:src="@{/js/check_token.js}"></script>
+<script type="text/javascript" th:src="@{/js/admin_access_info.js}"></script>
+</body>
+</html>

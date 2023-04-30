@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация об адресе</title>
+    <link rel = "stylesheet" th:href="@{/css/info.css}">
+    <link rel = "stylesheet" th:href="@{/css/button_back.css}">
+</head>
+<body>
+<div class="info-block">
+    <p th:text="'ID : ' + ${address.id}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Регион : ' + ${address.region}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Город : ' + ${address.city}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Улица : ' + ${address.street}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Дом : ' + ${address.house}"></p>
+</div>
+<div class="info-block">
+    <p th:text="'Квартира : ' + ${address.flat}"></p>
+</div>
+<div class="info-block shop">
+    <p th:text="'ID магазина : ' + ${address?.getShop()?.getId()}" class="shop" id = "shop"></p>
+</div>
+<div class="info-block shop">
+    <p th:text="'Глава магазина : ' + ${address?.getShop()?.getHead()}" class="shop"></p>
+</div>
+<div class="info-block shop">
+    <p th:text="'Телефон магазина : ' + ${address?.getShop()?.getPhone()}" class="shop"></p>
+</div>
+<div class="info-block employee">
+    <p th:text="'ID работника : ' + ${address?.getEmployee()?.id}" class="employee" id ="employee"></p>
+</div>
+<div class="info-block employee">
+    <p th:text="'Имя работника : ' + ${address?.getEmployee()?.name}" class="employee"></p>
+</div>
+<div class="info-block employee">
+    <p th:text="'Телефон работника : ' + ${address?.getEmployee()?.phone}" class="employee"></p>
+</div>
+<div class="info-block employee">
+    <p th:text="'Почта работника : ' + ${address?.getEmployee()?.email}" class="employee"></p>
+</div>
+<div class="info-block employee">
+    <p th:text="'Зарплата работника : ' + ${address?.getEmployee()?.salary}" class="employee"></p>
+</div>
+<div class="info-block employee">
+    <p th:text="'Должность работника : ' + ${address?.getEmployee()?.position}" ></p>
+</div>
+<button type="button" class="button-back" onclick="history.back()">Назад</button>
+<script type="text/javascript" th:src="@{/js/check_token.js}"></script>
+<script type="text/javascript" th:src="@{/js/address_info.js}" class="employee"></script>
+</body>
+</html>

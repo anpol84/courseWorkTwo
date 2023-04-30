@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменить товар</title>
+    <link rel = "stylesheet" th:href="@{/css/form.css}">
+    <link rel = "stylesheet" th:href="@{/css/button_back.css}">
+</head>
+<body>
+<div class="card mb-3">
+    <div class="card-body">
+        <form th:action="@{/api/v1/items}" th:method="put" class="f">
+            <fieldset>
+                <h2 class="fs-title">Изменить Товар</h2>
+                <div class="form-group">
+                    <label for="purchasePrice">Цена закупки:</label>
+                    <input type="number" th:value="${item.purchasePrice}" class="form-control" id="purchasePrice" name="purchasePrice" required>
+                </div>
+                <div class="form-group">
+                    <label for="sellingPrice">Цена продажи:</label>
+                    <input type="number" th:value="${item.sellingPrice}" class="form-control" id="sellingPrice" name="sellingPrice" required>
+                </div>
+                <div class="form-group">
+                    <label for="shop_id">ID магазина:</label>
+                    <input type="number" th:value="${shop_id}" class="form-control" id="shop_id" name="shop_id">
+                </div>
+                <div class="form-group">
+                    <label for="kind_id">ID вида:</label>
+                    <input type="number" th:value="${kind_id}" class="form-control" id="kind_id" name="kind_id">
+                </div>
+                <div class="form-group">
+                    <label for="category_id">ID Категории:</label>
+                    <input type="number" th:value="${category_id}" class="form-control" id="category_id" name="category_id">
+                </div>
+                <input type="hidden" name="id" th:value="${id}">
+                <button type="submit" class="btn btn-primary">Изменить</button>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<button type="button" class="button-back" onclick="history.back()">Назад</button>
+<script type="text/javascript" th:src="@{/js/check_token.js}"></script>
+<script type="text/javascript" th:src="@{/js/admin_access_info.js}"></script>
+</body>
+</html>

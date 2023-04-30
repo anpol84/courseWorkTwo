@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Работники</title>
+    <link rel = "stylesheet" th:href="@{/css/table.css}">
+    <link rel = "stylesheet" th:href="@{/css/form.css}">
+    <link rel = "stylesheet" th:href="@{/css/header.css}">
+</head>
+<body>
+<header>
+    <nav>
+        <a th:href="@{/api/v1/shops}">Магазины</a>
+        <a th:href="@{/api/v1/employees}" id ="employees">Работники</a>
+        <a th:href="@{/api/v1/pets}">Животные</a>
+        <a th:href="@{/api/v1/items}">Товары</a>
+        <a th:href="@{/api/v1/kinds}">Виды животных</a>
+        <a th:href="@{/api/v1/categories}">Категории товаров</a>
+        <a th:href="@{/api/v1/addresses}" id="addresses">Адреса</a>
+        <a th:href="@{/api/v1/users}">Пользователи</a>
+        <a th:href="@{/api/v1/auth/login}">Выход</a>
+    </nav>
+</header>
+<div class="container">
+    <input id="message" type="hidden" th:value="${message}">
+    <h1 id="main-heading">Работники</h1>
+
+    <!-- Форма для создания нового магазина -->
+    <div class="card mb-3" id="new-employee-form">
+
+        <div class="card-body">
+            <form th:action="@{/api/v1/employees}" class="f" method="post">
+                <fieldset>
+                    <h2 class="fs-title">Новый работник</h2>
+                    <div class="form-group">
+                        <label for="name">Имя:</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Телефон:</label>
+                        <input type="number" class="form-control" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Почта:</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="salary">Зарплата:</label>
+                        <input type="number" class="form-control" id="salary" name="salary" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="position">Должность:</label>
+                        <input type="text" class="form-control" id="position" name="position" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="shop_id">ID магазина:</label>
+                        <input type="number" class="form-control" id="shop_id" name="shop_id" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Создать</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <!-- Таблица для отображения магазинов -->
+    <table class="table table-striped" id="employee-table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Имя</th>
+            <th>Телефон</th>
+            <th>Почта</th>
+            <th>Зарплата</th>
+            <th>Должность</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee, iterationStatus : ${employees}" class="employee-row">
+            <td th:text="${iterationStatus.index + 1}" class="employee-index"></td>
+            <td th:text="${employee.name}" class="employee-name"></td>
+            <td th:text="${employee.phone}" class="employee-phone"></td>
+            <td th:text="${employee.email}" class="employee-email"></td>
+            <td th:text="${employee.salary}" class="employee-salary"></td>
+            <td th:text="${employee.position}" class="employee-position"></td>
+            <td>
+                <div class="btn-group" role="group">
+                    <form th:action="@{/api/v1/employees}" th:method="delete" class="delete-form">
+                        <input type="hidden" name="id" th:value="${employee.id}" class="delete-input" />
+                        <button type="submit" class="btn btn-danger delete-btn">Удалить</button>
+                    </form>
+                    <form th:action="@{/api/v1/employees/update}" th:method="get" class="update-form">
+                        <input type="hidden" name="id" th:value="${employee.id}" class="update-input" />
+                        <input type="hidden" name="shop_id" th:value="${employee.shop.id}" class="update-input" />
+                        <input type="hidden" name="name" th:value="${employee.name}" class="update-input" />
+                        <input type="hidden" name="phone" th:value="${employee.phone}" class="update-input" />
+                        <input type="hidden" name="email" th:value="${employee.email}" class="update-input" />
+                        <input type="hidden" name="salary" th:value="${employee.salary}" class="update-input" />
+                        <input type="hidden" name="position" th:value="${employee.position}" class="update-input" />
+                        <button type="submit" class="btn btn-secondary update-btn">Изменить</button>
+                    </form>
+                    <form th:action="@{/api/v1/employees/{id}(id=${employee.id})}" th:method="get" class="details-form">
+                        <button type="submit" class="btn btn-third details-btn">Подробнее</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Импорт библиотеки jQuery -->
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/check_token.js}"></script>
+<script type="text/javascript" th:src="@{/js/admin_access.js}"></script>
+<script type="text/javascript" th:src="@{/js/alert.js}"></script>
+<script type="text/javascript" th:src="@{/js/header_role.js}"></script>
+</body>
+</html>
