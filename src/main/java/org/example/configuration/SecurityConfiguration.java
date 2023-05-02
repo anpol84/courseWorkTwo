@@ -14,23 +14,17 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @ComponentScan("org.example.security.jwt")
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
     private final JwtTokenProvider jwtTokenProvider;
-
     private static final String LOGIN_ENDPOINT = "/api/v1/**";
-
-
     @Autowired
     public SecurityConfiguration(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
-
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 

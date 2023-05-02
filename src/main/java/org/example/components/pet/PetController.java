@@ -41,41 +41,31 @@ public class PetController {
         return "pet_put";
     }
 
-
     @PostMapping
     public String save(@ModelAttribute Pet pet, Model model,
                                        @RequestParam Long shop_id, @RequestParam Long kind_id){
         if (petService.checkKind(kind_id)){
-            model.addAttribute("message", "No Such Kind");
-            return findAll(model);
+            model.addAttribute("message", "No Such Kind"); return findAll(model);
         }
         if (petService.checkShop(shop_id)){
-            model.addAttribute("message", "No Such Shop");
-            return findAll(model);
+            model.addAttribute("message", "No Such Shop"); return findAll(model);
         }
         petService.save(pet, shop_id, kind_id);
         return findAll(model);
-
     }
-
     @DeleteMapping
     public String deleteById(@RequestParam Long id, Model model){
         petService.deleteById(id);
         return findAll(model);
     }
-
     @PutMapping
-    public String update(@ModelAttribute Pet pet, @RequestParam Long id,
-                                         @RequestParam(required = false) Long shop_id,
-                                         @RequestParam(required = false) Long kind_id,
-                                        Model model){
+    public String update(@ModelAttribute Pet pet, @RequestParam Long id, @RequestParam(required = false) Long shop_id,
+                                         @RequestParam(required = false) Long kind_id, Model model){
         if (kind_id != null && petService.checkKind(kind_id)){
-            model.addAttribute("message", "No Such Kind");
-            return findAll(model);
+            model.addAttribute("message", "No Such Kind"); return findAll(model);
         }
         if (shop_id != null && petService.checkShop(shop_id)){
-            model.addAttribute("message", "No Such Shop");
-            return findAll(model);
+            model.addAttribute("message", "No Such Shop"); return findAll(model);
         }
         model.addAttribute("id", id);
         petService.update(pet, id, shop_id, kind_id);

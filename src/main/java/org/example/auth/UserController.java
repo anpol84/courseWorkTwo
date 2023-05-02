@@ -17,7 +17,6 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/api/v1/users")
 public class UserController {
-
     private final UserService userService;
     private final AuthenticationRestController authenticationRestController;
     @Autowired
@@ -25,7 +24,6 @@ public class UserController {
         this.userService = userService;
         this.authenticationRestController = authenticationRestController;
     }
-
     @GetMapping(value = "{id}")
     public String getUserById(@PathVariable(name = "id") Long id, Model model){
         User user = userService.getUser(id);
@@ -57,7 +55,6 @@ public class UserController {
         userService.delete(id);
         return getAllUsers(model);
     }
-
     @PutMapping
     public String update(@ModelAttribute RegistrationUserDto registrationUserDto, @RequestParam Long id,
                          Model model){

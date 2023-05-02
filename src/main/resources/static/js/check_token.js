@@ -3,20 +3,22 @@ async function checkToken() {
     if (token) {
         let header = 'Bearer_' + token;
         try {
-            let response = await fetch('/api/v1/check', {
+            let response = await fetch('/api/check', {
                 method: 'GET',
                 headers:{
                     'Authorization': header
                 }
             });
             if (!response.ok){
-                location.href = 'api/v1/auth/login';
+                sessionStorage.setItem("message1", "message");
+                location.href = 'auth/login';
             }
         } catch (error) {
             console.error(error);
         }
     } else {
-        location.href = 'api/v1/auth/login';
+        sessionStorage.setItem("message2", "message");
+        location.href = 'auth/login';
     }
 }
 

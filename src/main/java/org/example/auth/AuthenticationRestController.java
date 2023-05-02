@@ -46,22 +46,15 @@ public class AuthenticationRestController {
     public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto) {
         try {
             String username = requestDto.getUsername();
-
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,
+                    requestDto.getPassword()));
             User user = userService.findByUsername(username);
             String role;
             if (user.getRoles().size() > 1){
                 role = user.getRoles().get(1).getName();
-            }else{
-                role = null;
-            }
-            if (user == null) {
-
-                throw new UsernameNotFoundException("User with username: " + username + " not found");
-            }
-
+            }else{role = null;}
+            if (user == null) {throw new UsernameNotFoundException("User with username: " + username + " not found");}
             String token = jwtTokenProvider.createToken(username, user.getRoles());
-            user.setToken(token);
             Map<Object, Object> response = new HashMap<>();
             response.put("username", username);
             response.put("token", token);
@@ -79,5 +72,6 @@ public class AuthenticationRestController {
                 registrationUserDto.getPassword());
         return login(requestDto);
     }
+
 }
 

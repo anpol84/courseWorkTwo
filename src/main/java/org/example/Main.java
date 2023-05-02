@@ -18,3 +18,6 @@ public class Main implements WebMvcConfigurer {
         registry.addResourceHandler("/static/**").addResourceLocations("/static/");
     }
 }
+
+
+
