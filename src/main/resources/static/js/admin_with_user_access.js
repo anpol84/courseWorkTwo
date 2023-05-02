@@ -1,6 +1,6 @@
 token = sessionStorage.getItem('token')
 if (token == null){
-    location.href = '/api/v1/auth/login';
+    location.href = 'api/v1/auth/login';
 }
 role = sessionStorage.getItem('role')
 if (role !== 'ROLE_ADMIN'){

@@ -10,3 +10,6 @@ RUN mvn clean package
 EXPOSE 9090
 
 CMD ["java", "-jar", "/app/target/courseWork-0.0.1-SNAPSHOT.jar"]
+
+
+

@@ -1,5 +1,4 @@
 version: '3'
-
 services:
   mysql:
     image: mysql:5.5
@@ -10,7 +9,6 @@ services:
       - mysql-data:/var/lib/mysql
     networks:
       - item-network
-    
   server:
     build: .
     ports:
@@ -27,9 +25,7 @@ services:
       - mysql
     networks:
       - item-network
-
 networks:
   item-network:
-
 volumes:
   mysql-data:
