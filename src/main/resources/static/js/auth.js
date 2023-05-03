@@ -54,7 +54,7 @@ form2.addEventListener('submit', (event) => {
         if (response.ok) { // Если запрос успешен
             return response.json(); // Парсим ответ в формате JSON
         } else {
-            alert("Пользователь с такими данными уже существует")
+            alert("Пользователь с такими данными уже существует, либо ваши данные содержат кириллицу")
             throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
     }).then(data => {
