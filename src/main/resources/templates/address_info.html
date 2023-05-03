@@ -52,7 +52,9 @@
 <div class="info-block employee">
     <p th:text="'Должность работника : ' + ${address?.getEmployee()?.position}" ></p>
 </div>
-<button type="button" class="button-back" onclick="history.back()">Назад</button>
+<form th:action="@{/api/v1/addresses}" th:method="get" class="details-form">
+    <button type="submit" class="button-back">Назад</button>
+</form>
 <script type="text/javascript" th:src="@{/js/check_token.js}"></script>
 <script type="text/javascript" th:src="@{/js/address_info.js}" class="employee"></script>
 </body>

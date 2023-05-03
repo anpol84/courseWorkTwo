@@ -37,7 +37,9 @@
     <input type="hidden" name="id" th:value="${user.id}" class="update-input" />
     <button type="submit" class="button-back">Изменить</button>
 </form>
-<button type="button" class="button-back" onclick="history.back()">Назад</button>
+<form th:action="@{/api/v1/users}" th:method="get" class="details-form">
+    <button type="submit" class="button-back">Назад</button>
+</form>
 <script type="text/javascript" th:src="@{/js/check_token.js}"></script>
 <script type="text/javascript" th:src="@{/js/user_info.js}"></script>
 </body>
